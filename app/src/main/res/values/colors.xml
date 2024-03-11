@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+<!--    Using for text-->
     <color name="white">#FFFFFFFF</color>
+    <color name="bg_dark">#24293E</color>
+    <color name="light_blue">#8BEEFF</color>
+    <color name="grey">#7F8489</color>
+    <color name="periwinkle">#9570FF</color>
+    <color name="sky_blue">#39C0D4</color>
+    <color name="button_hover">#01B8AD</color>
+    <color name="icon_button">#11FDD2</color>
 </resources>
