@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.fragment.HomeFragment;
 import com.project.soulsoundapp.fragment.LibraryFragment;
+
 import com.project.soulsoundapp.fragment.SearchFragment;
 import com.project.soulsoundapp.fragment.SettingFragment;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdapter.addFragment(new SearchFragment(), "Search");
         viewPagerAdapter.addFragment(new LibraryFragment(), "Library");
         viewPagerAdapter.addFragment(new SettingFragment(), "Setting");
+
 //        viewPagerAdapter.addFragment(new TestFragment(), "Test");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="7dp">
+
+    <ImageView
+        android:id="@+id/ivImgAlbum"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/kpop"
+        />
+    <TextView
+        android:id="@+id/tvNameAlbum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginVertical="4dp"
+        android:textStyle="bold"
+        android:text="sinh (EP)"
+        />
+    <TextView
+        android:id="@+id/tvArtistAlbum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="Mer, Kriss"
+        />
+</LinearLayout>
