@@ -1,6 +1,8 @@
 package com.project.soulsoundapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 
@@ -8,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.activity.PlayMusicActivity;
 import com.project.soulsoundapp.model.Artist;
 import com.project.soulsoundapp.model.Song;
 
@@ -43,6 +46,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         holder.ivSongImage.setImageResource(song.getImage());
         holder.tvSongTitle.setText(song.getName());
         holder.tvSongArtistName.setText(getSongArtistName(song.getArtists()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PlayMusicActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

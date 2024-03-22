@@ -22,7 +22,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/material_dynamic_secondary90"
+        android:background="@color/white"
         android:padding="16dp">
 
         <TextView
