@@ -8,14 +8,14 @@
     <Button
         android:id="@+id/btnCloseLyrics"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="@drawable/btn_background"
         android:drawableStart="@drawable/ic_music_sign"
         android:drawableEnd="@drawable/ic_keyboard_arrow_down"
-        android:drawablePadding="10dp"
+        android:drawablePadding="25dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:text="Lyrics"
         android:textSize="20dp" />
 
