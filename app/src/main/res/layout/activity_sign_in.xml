@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/bg_signin"
     tools:context=".activity.SignInActivity">
 
     <LinearLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/background_blur"
+        android:background="@drawable/bg_blur"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,8 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:alpha="0.7"
-            android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/ic_mail1"
+            android:background="@drawable/bg_edittext_underline"
+            android:drawableStart="@drawable/ic_mail"
             android:drawablePadding="10dp"
             android:ems="10"
             android:hint="Email"
@@ -55,9 +55,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:alpha="0.7"
-            android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/ic_lock1"
-            android:drawableEnd="@drawable/ic_eye_off1"
+            android:background="@drawable/bg_edittext_underline"
+            android:drawableStart="@drawable/ic_lock"
+            android:drawableEnd="@drawable/ic_eye_off"
 
             android:drawablePadding="5dp"
             android:ems="10"
