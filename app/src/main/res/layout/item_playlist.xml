@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="10dp"
+    android:background="@color/bg_dark"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <ImageView
+        android:id="@+id/ivPlaylistImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/kpop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvPlaylistName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current favorites"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvSongCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="songs"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

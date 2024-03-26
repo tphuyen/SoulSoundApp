@@ -25,6 +25,7 @@ public class PlayMusicActivity extends AppCompatActivity {
 
         setupMenuButton();
         setupLyricsButton();
+        handleBackButton();
     }
 
     private void setupMenuButton() {
@@ -84,6 +85,15 @@ public class PlayMusicActivity extends AppCompatActivity {
 
                 bottomSheetDialog.setContentView(view);
                 bottomSheetDialog.show();
+            }
+        });
+    }
+    private void handleBackButton() {
+        ImageButton ibBack = findViewById(R.id.ibBack);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }

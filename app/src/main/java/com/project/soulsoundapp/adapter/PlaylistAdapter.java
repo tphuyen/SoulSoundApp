@@ -1,5 +1,7 @@
 package com.project.soulsoundapp.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,43 +13,65 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.soulsoundapp.R;
-import com.project.soulsoundapp.model.Category;
-import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.activity.PlaylistActivity;
+import com.project.soulsoundapp.model.Playlist;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.SongViewHolder> {
-    private ArrayList<Song> songs = new ArrayList<>();
+public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder> {
+    private List<Playlist> playlists;
+    private Context context;
 
-    public void setSongs(ArrayList<Song> songs) {
-        this.songs = songs;
+    public PlaylistAdapter(Context context) {
+        this.context = context;
+    }
+
+    public void setPlaylist(List<Playlist> playlists) {
+        this.playlists = playlists;
         notifyDataSetChanged();
-    }
-
-    @NonNull
-    @Override
-    public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_song, parent, false);
-        return new SongViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
-        Song song = songs.get(position);
-        if(song == null) {
-            return;
-        }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return playlists.size();
     }
 
-    public class SongViewHolder extends RecyclerView.ViewHolder {
-        public SongViewHolder(@NonNull View itemView) {
+    @NonNull
+    @Override
+    public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist, parent, false);
+        return new PlaylistViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
+        Playlist playlist = playlists.get(position);
+        if (playlists == null) return;
+        holder.ivPlaylistImage.setImageResource(playlist.getImage());
+        holder.tvPlaylistName.setText(playlist.getName());
+        int songCount = playlist.getSongCount();
+        holder.tvSongCount.setText(String.format("%d songs", songCount));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PlaylistActivity.class);
+                intent.putExtra("title", playlist.getName());
+                intent.putExtra("image", playlist.getImage());
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public class PlaylistViewHolder extends RecyclerView.ViewHolder {
+        private ImageView ivPlaylistImage;
+        private TextView tvPlaylistName, tvSongCount;
+
+        public PlaylistViewHolder(@NonNull View itemView) {
             super(itemView);
-//            Find component
+            ivPlaylistImage = itemView.findViewById(R.id.ivPlaylistImage);
+            tvPlaylistName = itemView.findViewById(R.id.tvPlaylistName);
+            tvSongCount = itemView.findViewById(R.id.tvSongCount);
         }
     }
 }

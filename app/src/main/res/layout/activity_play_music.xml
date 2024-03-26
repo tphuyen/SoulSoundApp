@@ -29,34 +29,36 @@
 
     <ImageButton
         android:id="@+id/ibBack"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:contentDescription="Back"
         android:background="@drawable/ic_arrow_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
         android:id="@+id/ivSong"
-        android:layout_width="409dp"
-        android:layout_height="375dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:contentDescription="@string/app_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ibBack"
         app:srcCompat="@drawable/img_song" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="360dp"
-        android:layout_height="195dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@id/btnLyrics"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivSong">
 
@@ -64,30 +66,54 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_centerInParent="true"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvTitle"
+            <LinearLayout
+                android:id="@+id/linearLayoutTitleArtistMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvArtist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tvArtist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/ibMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/ic_menu"
+                    android:contentDescription="Menu"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
 
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
                 android:layout_height="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 android:progressTint="@color/design_default_color_secondary"
                 android:thumb="@drawable/ic_baseline_circle"
                 android:thumbTint="@color/design_default_color_secondary" />
@@ -123,7 +149,7 @@
                 android:id="@+id/linearLayoutButtons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -131,15 +157,16 @@
                     android:id="@+id/btnFavourite"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginEnd="10dp"
                     android:background="@drawable/ic_favorite"
-                    android:contentDescription="favourite" />
+                    android:contentDescription="favourite"
+                    android:layout_marginEnd="15dp"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <ImageButton
                     android:id="@+id/btnPrevious"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/ic_skip_previous"
                     android:contentDescription="previous" />
 
@@ -147,7 +174,7 @@
                     android:id="@+id/btnPlayPause"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/ic_play_circle"
                     android:contentDescription="play_pause" />
 
@@ -155,7 +182,7 @@
                     android:id="@+id/btnNext"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/ic_skip_next"
                     android:contentDescription="next" />
 
@@ -164,35 +191,27 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:background="@drawable/ic_shuffle"
-                    android:contentDescription="shuffle" />
+                    android:contentDescription="shuffle"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/ibMenu"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:contentDescription="Menu"
-            android:background="@drawable/ic_menu" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/btnLyrics"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/btn_background"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_lyrics_background"
         android:drawableStart="@drawable/ic_music_sign"
         android:drawableEnd="@drawable/ic_keyboard_arrow_up"
-        android:drawablePadding="10dp"
+        android:drawablePadding="25dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:text="Lyrics"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
