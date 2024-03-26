@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import com.project.soulsoundapp.R;
 
 public class SettingActivity extends AppCompatActivity {
-    EditText etName, etEmail, etPhone, etPassword, etConfirmPassword;
+    EditText etName, etEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +36,9 @@ public class SettingActivity extends AppCompatActivity {
     private void fillData() {
         etEmail = findViewById(R.id.etEmail);
         etName = findViewById(R.id.etName);
-        etPhone = findViewById(R.id.etPhone);
 
         etEmail.setText("example@gmail.com");
         etName.setText("John Doe");
-        etPhone.setText("1234567890");
     }
 
     private void handleSaveButton() {
@@ -50,15 +48,9 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 etName = findViewById(R.id.etName);
                 etEmail = findViewById(R.id.etEmail);
-                etPhone = findViewById(R.id.etPhone);
-                etPassword = findViewById(R.id.etPassword);
-                etConfirmPassword = findViewById(R.id.etConfirmPassword);
 
                 String name = etName.getText().toString();
                 String email = etEmail.getText().toString();
-                String phone = etPhone.getText().toString();
-                String password = etPassword.getText().toString();
-                String confirmPassword = etConfirmPassword.getText().toString();
 
                 // Save the data to the database...
             }
