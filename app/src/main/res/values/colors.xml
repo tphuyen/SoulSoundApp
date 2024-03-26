@@ -10,4 +10,5 @@
     <color name="sky_blue">#39C0D4</color>
     <color name="button_hover">#01B8AD</color>
     <color name="icon_button">#11FDD2</color>
+    <color name="bottom_nav">#2F353A</color>
 </resources>
