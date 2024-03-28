@@ -40,4 +40,5 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.squareup.picasso:picasso:2.8")
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.0")
 }

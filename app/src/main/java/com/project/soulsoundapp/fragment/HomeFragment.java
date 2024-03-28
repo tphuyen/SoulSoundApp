@@ -20,11 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
     private RecyclerView rvDiscover;
     @Override
@@ -55,14 +50,6 @@ public class HomeFragment extends Fragment {
 
     private List<Album> laydulieu() {
         List<Album> albums = new ArrayList<>();
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
         albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
         albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
         albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));

@@ -4,19 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.helper.DatabaseHelper;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText etName, etEmail, etPassword, etConfirmPw;
     private TextView tvPwError, tvCheckPw;
+    private ImageView passwordIcon, ConfirmPwIcon;
     private Button btnSignUp;
     private final int counter = 6;
+    private boolean passwordShowing = false;
+
+    private DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +37,9 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btnSignUp);
         tvPwError = findViewById(R.id.tvPwError);
         tvCheckPw = findViewById(R.id.tvCheckPw);
-
+        passwordIcon = findViewById(R.id.passwordIcon);
+        ConfirmPwIcon = findViewById(R.id.ConfirmPwIcon);
+        databaseHelper = new DatabaseHelper(this);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,32 +49,68 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String confirmpw = etConfirmPw.getText().toString();
 
-                if(password.length()<counter && confirmpw.length()<counter){
-                    tvPwError.setVisibility(View.VISIBLE);
-                    tvPwError.setText("Password must be at least "+ counter+" characters long");
-                    return;
+                if(name.equals("") || email.equals("") || password.equals("") || confirmpw.equals("")){
+                    Toast.makeText(SignUpActivity.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
                 }else {
-                    tvPwError.setVisibility(View.GONE);
-                }
-                // Implement authentication logic here
-                if(!password.equals(confirmpw) ){
-                    tvCheckPw.setVisibility(View.VISIBLE);
-                    tvCheckPw.setText("Password not match");
+//                    if(password.length()<counter && confirmpw.length()<counter){
+//                        tvPwError.setVisibility(View.VISIBLE);
+//                        tvPwError.setText("Password must be at least "+ counter+" characters long");
+//                        return;
+//                    }else {
+//                        tvPwError.setVisibility(View.GONE);
+//                    }
+                    if (password.equals(confirmpw)) {
+                        boolean checkUserEmail = databaseHelper.checkMail(email);
+                        if (checkUserEmail == false) {
+                            boolean insert = databaseHelper.insertatata(view.getContext(), email, name, password);
 
+                            if (insert) {
+                                Toast.makeText(SignUpActivity.this, "Sign up Successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(SignUpActivity.this, "Sign up Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        tvCheckPw.setVisibility(View.VISIBLE);
+                        tvCheckPw.setText("Password not match");
+                    }
                 }
-                else {
-                    Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                    startActivity(intent);
+            }
+        });
+
+        passwordIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(passwordShowing){
+                    passwordShowing = false;
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    passwordIcon.setImageResource(R.drawable.ic_show);
+                }else {
+                    passwordShowing = true;
+                    etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    passwordIcon.setImageResource(R.drawable.ic_eye_off);
                 }
-//                if (email.equals("huyentp@gmail.com") && password.equals("123456")) {
-//                    // Successful login
-//                    Toast.makeText(SignUpActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    // Failed login
-//                    Toast.makeText(SignUpActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
-//                }
+                etPassword.setSelection(etPassword.length());
+            }
+        });
+
+        ConfirmPwIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(passwordShowing){
+                    passwordShowing = false;
+                    etConfirmPw.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ConfirmPwIcon.setImageResource(R.drawable.ic_show);
+                }else {
+                    passwordShowing = true;
+                    etConfirmPw.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    ConfirmPwIcon.setImageResource(R.drawable.ic_eye_off);
+                }
+                etConfirmPw.setSelection(etConfirmPw.length());
             }
         });
     }
