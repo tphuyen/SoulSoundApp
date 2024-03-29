@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.*;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.*;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.adapter.PlaylistAdapter;
@@ -56,11 +54,11 @@ public class LibraryFragment extends Fragment {
 
     public List<Playlist> getListPlaylists() {
         List<Playlist> playlists = new ArrayList<Playlist>();
-        playlists.add(new Playlist("Playlist 1", R.drawable.kpop, 10));
-        playlists.add(new Playlist("Playlist 2", R.drawable.kpop, 15));
-        playlists.add(new Playlist("Playlist 3", R.drawable.kpop, 20));
-        playlists.add(new Playlist("Playlist 4", R.drawable.kpop, 25));
-        playlists.add(new Playlist("Playlist 5", R.drawable.kpop, 30));
+        playlists.add(new Playlist("Playlist 1", R.drawable.img_kpop, 10));
+        playlists.add(new Playlist("Playlist 2", R.drawable.img_kpop, 15));
+        playlists.add(new Playlist("Playlist 3", R.drawable.img_kpop, 20));
+        playlists.add(new Playlist("Playlist 4", R.drawable.img_kpop, 25));
+        playlists.add(new Playlist("Playlist 5", R.drawable.img_kpop, 30));
         return playlists;
     }
 }

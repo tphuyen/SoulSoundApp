@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/button_hover"/> <!-- Màu của thumb -->
-    <size android:width="10dp" android:height="10dp"/> <!-- Kích thước của thumb -->
-</shape>

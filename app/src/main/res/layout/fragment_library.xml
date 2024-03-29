@@ -25,7 +25,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -46,14 +47,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="Add new playlist"
-                android:drawableStart="@drawable/ellipse"
+                android:drawableStart="@drawable/ic_ellipse"
                 android:text="Add New Playlist"
                 android:textColor="@color/white"
                 android:background="@color/bg_dark"
                 android:paddingStart="25dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="TouchTargetSizeCheck" />
+                tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPlaylists"

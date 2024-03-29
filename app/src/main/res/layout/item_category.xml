@@ -28,7 +28,7 @@
         android:layout_width="80dp"
         android:layout_height="85dp"
         android:id="@+id/ivCategoryImage"
-        android:background="@drawable/kpop"
+        android:background="@drawable/img_kpop"
         android:rotation="-45"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

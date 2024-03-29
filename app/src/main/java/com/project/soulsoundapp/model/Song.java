@@ -4,47 +4,67 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Song implements Serializable {
-    private int id;
-    private int image;
-    private String name;
-    private List<Artist> artists;
+    private final int id;
+    private final String title;
+    private double likes;
+    private final String lyricUrl;
+    private final String thumbnailUrl;
+    private final String coverUrl;
+    private final String streamUrl;
+    private final String artist;
 
-    public Song(int id, int image, String name, List<Artist> artists) {
+    public Song(int id, String title, double likes, String lyricUrl, String thumbnailUrl, String coverUrl, String streamUrl, String artist) {
         this.id = id;
-        this.image = image;
-        this.name = name;
-        this.artists = artists;
+        this.title = title;
+        this.likes = likes;
+        this.lyricUrl = lyricUrl;
+        this.thumbnailUrl = thumbnailUrl;
+        this.coverUrl = coverUrl;
+        this.streamUrl = streamUrl;
+        this.artist = artist;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getTitle() {
+        return title;
     }
 
-    public int getImage() {
-        return image;
+    public double getLikes() {
+        return likes;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setLikes(double likes) {
+        this.likes = likes;
     }
 
-    public String getName() {
-        return name;
+    public String getLyricUrl() {
+        return lyricUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 
-    public List<Artist> getArtists() {
-        return artists;
+    public String getCoverUrl() {
+        return coverUrl;
     }
 
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
+    public String getStreamUrl() {
+        return streamUrl;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Song song = (Song) obj;
+        return id == song.id;
     }
 }
