@@ -2,6 +2,7 @@ package com.project.soulsoundapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.activity.PlaylistActivity;
+import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Playlist;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -46,18 +49,20 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     @Override
     public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
         Playlist playlist = playlists.get(position);
-        if (playlists == null) return;
-        holder.ivPlaylistImage.setImageResource(playlist.getImage());
-        holder.tvPlaylistName.setText(playlist.getName());
-        int songCount = playlist.getSongCount();
+        if (playlist == null) return;
+//        holder.ivPlaylistImage.setImageResource(playlist.getImage());
+        Picasso.get().load(playlist.getPlaylistThumbnail()).into(holder.ivPlaylistImage);
+        holder.tvPlaylistName.setText(playlist.getPlaylistTitle());
+        int songCount = playlist.getPlaylistSongs().size();
         holder.tvSongCount.setText(String.format("%d songs", songCount));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PlaylistActivity.class);
-                intent.putExtra("title", playlist.getName());
-                intent.putExtra("image", playlist.getImage());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("playlist", playlist);
+                intent.putExtras(bundle);
                 context.startActivity(intent);
             }
         });
