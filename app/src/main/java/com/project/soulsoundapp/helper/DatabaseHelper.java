@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    TABLE
     private static final String TABLE_SONG = "Songs";
     private static final String TABLE_PLAYLIST = "Playlists";
-    private static final String TABLE_PLAYLIST_SONG = "Playlist-Song"
+    private static final String TABLE_PLAYLIST_SONG = "Playlist-Song";
 
 //    SONG KEY
     private static final String KEY_SONG_ID = "id";
