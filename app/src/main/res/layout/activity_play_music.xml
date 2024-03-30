@@ -16,7 +16,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/img_song" />
+        app:srcCompat="@drawable/bg_resetpw"
+        tools:ignore="ContentDescription" />
 
     <View
         android:layout_width="0dp"
@@ -37,19 +38,19 @@
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
     <ImageView
-        android:id="@+id/ivSong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/app_name"
+        android:id="@+id/ivSongCover"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ibBack"
-        app:srcCompat="@drawable/img_song" />
+        app:srcCompat="@drawable/img_kpop"
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -60,14 +61,15 @@
         app:layout_constraintBottom_toTopOf="@id/btnLyrics"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSong">
+        app:layout_constraintTop_toBottomOf="@+id/ivSongCover">
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
 
             <LinearLayout
                 android:id="@+id/linearLayoutTitleArtistMenu"
@@ -77,7 +79,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -106,16 +108,16 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/ic_menu"
                     android:contentDescription="Menu"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
             </LinearLayout>
 
             <SeekBar
-                android:id="@+id/seekBar"
+                android:id="@+id/sbSongProgress"
                 android:layout_width="match_parent"
                 android:layout_height="15dp"
                 android:layout_marginTop="25dp"
                 android:progressTint="@color/design_default_color_secondary"
-                android:thumb="@drawable/ic_baseline_circle"
+                android:thumb="@drawable/ic_circle"
                 android:thumbTint="@color/design_default_color_secondary" />
 
             <LinearLayout
@@ -130,9 +132,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="00:00"
+                    android:text="0:00"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
 
                 <TextView
                     android:id="@+id/tvEndTime"
@@ -140,9 +143,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="00:00"
+                    android:text="0:00"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
@@ -154,45 +158,48 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/btnFavourite"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/ibFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/ic_favorite"
                     android:contentDescription="favourite"
                     android:layout_marginEnd="15dp"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
 
                 <ImageButton
-                    android:id="@+id/btnPrevious"
+                    android:id="@+id/ibPrevious"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/ic_skip_previous"
-                    android:contentDescription="previous" />
+                    android:contentDescription="previous"
+                    tools:ignore="HardcodedText" />
 
                 <ImageButton
-                    android:id="@+id/btnPlayPause"
+                    android:id="@+id/ibPlayPause"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginEnd="15dp"
-                    android:background="@drawable/ic_play_circle"
-                    android:contentDescription="play_pause" />
+                    android:background="@drawable/ic_pause"
+                    android:contentDescription="play_pause"
+                    tools:ignore="HardcodedText" />
 
                 <ImageButton
-                    android:id="@+id/btnNext"
+                    android:id="@+id/ibNext"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/ic_skip_next"
-                    android:contentDescription="next" />
+                    android:contentDescription="next"
+                    tools:ignore="HardcodedText" />
 
                 <ImageButton
-                    android:id="@+id/btnShuffle"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:id="@+id/ibShuffle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/ic_shuffle"
                     android:contentDescription="shuffle"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="HardcodedText,TouchTargetSizeCheck" />
             </LinearLayout>
 
         </LinearLayout>
@@ -205,7 +212,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/btn_lyrics_background"
         android:drawableStart="@drawable/ic_music_sign"
-        android:drawableEnd="@drawable/ic_keyboard_arrow_up"
+        android:drawableEnd="@drawable/ic_arrow_up"
         android:drawablePadding="25dp"
         android:gravity="center_vertical"
         android:paddingStart="25dp"
@@ -214,6 +221,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

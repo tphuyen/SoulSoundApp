@@ -1,50 +1,126 @@
 package com.project.soulsoundapp.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
 public class Song implements Serializable {
-    private int id;
-    private int image;
-    private String name;
-    private List<Artist> artists;
+    @SerializedName("id")
+    private String id;
 
-    public Song(int id, int image, String name, List<Artist> artists) {
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("duration")
+    private int duration;
+
+    @SerializedName("song_artist_names")
+    private String artist;
+
+    @SerializedName("likes")
+    private int likes;
+
+    @SerializedName("song_url")
+    private String songUrl;
+
+    @SerializedName("thumbnail_url")
+    private String thumbnailUrl;
+
+    @SerializedName("cover_url")
+    private String coverUrl;
+
+    @SerializedName("lyric_url")
+    private String lyricUrl;
+
+    public Song(String id, String title, int duration, String artist, int likes, String songUrl, String thumbnailUrl, String coverUrl, String lyricUrl) {
         this.id = id;
-        this.image = image;
-        this.name = name;
-        this.artists = artists;
+        this.title = title;
+        this.duration = duration;
+        this.artist = artist;
+        this.likes = likes;
+        this.songUrl = songUrl;
+        this.thumbnailUrl = thumbnailUrl;
+        this.coverUrl = coverUrl;
+        this.lyricUrl = lyricUrl;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getImage() {
-        return image;
+    public String getTitle() {
+        return title;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
-    public List<Artist> getArtists() {
-        return artists;
+    public String getArtist() {
+        return artist;
     }
 
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public String getSongUrl() {
+        return songUrl;
+    }
+
+    public void setSongUrl(String songUrl) {
+        this.songUrl = songUrl;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
+
+    public String getLyricUrl() {
+        return lyricUrl;
+    }
+
+    public void setLyricUrl(String lyricUrl) {
+        this.lyricUrl = lyricUrl;
+    }
+  
+      @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Song song = (Song) obj;
+        return id == song.id;
     }
 }

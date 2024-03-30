@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.activity.PlayMusicActivity;
-import com.project.soulsoundapp.model.Artist;
 import com.project.soulsoundapp.model.Song;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder>{
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
     private List<Song> songs = new ArrayList<>();
     private Context context;
 
@@ -30,6 +30,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         notifyDataSetChanged();
     }
 
+    public class SongViewHolder extends RecyclerView.ViewHolder {
+        private ImageView ivSongImage;
+        private TextView tvSongTitle;
+        private TextView tvSongArtistName;
+
+        public SongViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivSongImage = itemView.findViewById(R.id.ivSongImage);
+            tvSongTitle = itemView.findViewById(R.id.tvSongTitle);
+            tvSongArtistName = itemView.findViewById(R.id.tvSongArtistName);
+        }
+    }
+
     @NonNull
     @Override
     public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,27 +53,23 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         Song song = songs.get(position);
-        if(song == null) {
-            return;
-        }
-        holder.ivSongImage.setImageResource(song.getImage());
-        holder.tvSongTitle.setText(song.getName());
-        holder.tvSongArtistName.setText(getSongArtistName(song.getArtists()));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, PlayMusicActivity.class);
-                context.startActivity(intent);
-            }
+
+        if (song == null) return;
+        holder.tvSongTitle.setText(song.getTitle());
+        holder.tvSongArtistName.setText(song.getArtist());
+        Picasso.get().load(song.getThumbnailUrl()).into(holder.ivSongImage);
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(context, PlayMusicActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("song", song);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        if(songs == null) {
-            return 0;
-        }
-        return songs.size();
+        return songs == null ? 0 : songs.size();
     }
 
     public class SongViewHolder extends RecyclerView.ViewHolder {
@@ -74,14 +83,5 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             tvSongTitle = (TextView) itemView.findViewById(R.id.tvSongTitle);
             tvSongArtistName = (TextView) itemView.findViewById(R.id.tvSongArtistName);
         }
-    }
-
-    private String getSongArtistName(List<Artist> artists) {
-        if(artists == null) return "Unknown artist";
-        String artistsName = "";
-        for (Artist artist : artists) {
-            artistsName += artist.getName() + " ";
-        }
-        return artistsName;
     }
 }

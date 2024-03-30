@@ -119,11 +119,19 @@ public class HomeFragment extends Fragment {
 
     private List<Album> laydulieu() {
         List<Album> albums = new ArrayList<>();
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
+        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
         return albums;
     }
 

@@ -4,56 +4,61 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.adapter.SongAdapter;
+import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.service.ApiService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PlaylistActivity extends AppCompatActivity {
     private TextView tvTitle;
     private ImageButton ibReturn;
     private ImageView ivPlaylistImage;
     private RecyclerView rvSongsList;
+    private List<Song> songs;
+    private Playlist playlist;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
-
-        addControl();
-        addEvent();
+        playlist = (Playlist) getIntent().getSerializableExtra("playlist");
+        db = DatabaseHelper.getInstance(getApplicationContext());
+        songs = new ArrayList<>();
+        addControls();
+        addEvents();
     }
 
-
-    public void addControl() {
-//        Declared component in xml file <activity_playlist>
+    public void addControls() {
         tvTitle = findViewById(R.id.tvTitle);
         ibReturn = findViewById(R.id.ibReturn);
         ivPlaylistImage = findViewById(R.id.ivPlaylistImage);
         rvSongsList = findViewById(R.id.rvSongsList);
-//        Init adapter & setAdapter for recycler view
-        SongAdapter songAdapter = new SongAdapter(this);
-        songAdapter.setSongs(getListSongs());
-//        Init layout manager & setLayoutManager for recycler
+
         LinearLayoutManager managerSongs = new LinearLayoutManager(this);
         rvSongsList.setLayoutManager(managerSongs);
-        rvSongsList.setAdapter(songAdapter);
-//        Function to chagne view
-        updateIntentData();
+
+        getListSongs();
     }
 
-    public void addEvent() {
+    public void addEvents() {
         ibReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,23 +68,24 @@ public class PlaylistActivity extends AppCompatActivity {
     }
 
     public void updateIntentData() {
-        tvTitle.setText(getIntent().getStringExtra("title"));
-//        ivPlaylistImage.setImageResource(getIntent().getIntExtra("image", 0));
-        Picasso.get().load("https://music-player.sgp1.digitaloceanspaces.com/song_thumbnail/Z6600ZCOx96.jpg").into(ivPlaylistImage);
+        tvTitle.setText(playlist.getPlaylistTitle());
+        Picasso.get().load(playlist.getPlaylistCover()).into(ivPlaylistImage);
     }
 
-    private List<Song> getListSongs() {
-        List<Song> songs = new ArrayList<Song>();
-        songs.add(new Song(1, R.drawable.ic_launcher_background, "Không sao mà, Em đây rồi", null));
-        songs.add(new Song(2, R.drawable.ic_launcher_background, "Ngày đầu tiên", null));
-        songs.add(new Song(3, R.drawable.ic_launcher_background, "Yêu người có ước mơ", null));
-        songs.add(new Song(4, R.drawable.ic_launcher_background, "Từng là của nhau", null));
-        songs.add(new Song(5, R.drawable.ic_launcher_background, "Đưa nhau đi trốn", null));
-        songs.add(new Song(6, R.drawable.ic_launcher_background, "Không sao mà, Em đây rồi", null));
-        songs.add(new Song(7, R.drawable.ic_launcher_background, "Ngày đầu tiên", null));
-        songs.add(new Song(8, R.drawable.ic_launcher_background, "Yêu người có ước mơ", null));
-        songs.add(new Song(9, R.drawable.ic_launcher_background, "Từng là của nhau", null));
-        songs.add(new Song(10, R.drawable.ic_launcher_background, "Đưa nhau đi trốn", null));
-        return songs;
+    private void setSongsList(List<Song> songs) {
+        SongAdapter songAdapter = new SongAdapter(this);
+        songAdapter.setSongs(songs);
+        rvSongsList.setAdapter(songAdapter);
+    }
+
+    private void getListSongs() {
+        if (db != null) {
+            songs = db.getSongByIds(playlist.getPlaylistSongs());
+            setSongsList(songs);
+            updateIntentData();
+        } else {
+            // Xử lý trường hợp db chưa được khởi tạo
+            Toast.makeText(getApplicationContext(), "Database is not initialized", Toast.LENGTH_SHORT).show();
+        }
     }
 }
