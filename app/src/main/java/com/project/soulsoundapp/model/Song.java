@@ -1,66 +1,122 @@
 package com.project.soulsoundapp.model;
 
+import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
 public class Song implements Serializable {
-    private final int id;
-    private final String title;
-    private double likes;
-    private final String lyricUrl;
-    private final String thumbnailUrl;
-    private final String coverUrl;
-    private final String streamUrl;
-    private final String artist;
+    @SerializedName("id")
+    private String id;
 
-    public Song(int id, String title, double likes, String lyricUrl, String thumbnailUrl, String coverUrl, String streamUrl, String artist) {
+    @SerializedName("title")
+    private String title;
+
+    @SerializedName("duration")
+    private int duration;
+
+    @SerializedName("song_artist_names")
+    private String artist;
+
+    @SerializedName("likes")
+    private int likes;
+
+    @SerializedName("song_url")
+    private String songUrl;
+
+    @SerializedName("thumbnail_url")
+    private String thumbnailUrl;
+
+    @SerializedName("cover_url")
+    private String coverUrl;
+
+    @SerializedName("lyric_url")
+    private String lyricUrl;
+
+    public Song(String id, String title, int duration, String artist, int likes, String songUrl, String thumbnailUrl, String coverUrl, String lyricUrl) {
         this.id = id;
         this.title = title;
+        this.duration = duration;
+        this.artist = artist;
         this.likes = likes;
-        this.lyricUrl = lyricUrl;
+        this.songUrl = songUrl;
         this.thumbnailUrl = thumbnailUrl;
         this.coverUrl = coverUrl;
-        this.streamUrl = streamUrl;
-        this.artist = artist;
+        this.lyricUrl = lyricUrl;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public double getLikes() {
-        return likes;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setLikes(double likes) {
-        this.likes = likes;
+    public int getDuration() {
+        return duration;
     }
 
-    public String getLyricUrl() {
-        return lyricUrl;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public String getCoverUrl() {
-        return coverUrl;
-    }
-
-    public String getStreamUrl() {
-        return streamUrl;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public String getArtist() {
         return artist;
     }
 
-    @Override
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public String getSongUrl() {
+        return songUrl;
+    }
+
+    public void setSongUrl(String songUrl) {
+        this.songUrl = songUrl;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
+
+    public String getLyricUrl() {
+        return lyricUrl;
+    }
+
+    public void setLyricUrl(String lyricUrl) {
+        this.lyricUrl = lyricUrl;
+    }
+  
+      @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;

@@ -53,6 +53,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         Song song = songs.get(position);
+
         if (song == null) return;
         holder.tvSongTitle.setText(song.getTitle());
         holder.tvSongArtistName.setText(song.getArtist());
@@ -69,5 +70,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     @Override
     public int getItemCount() {
         return songs == null ? 0 : songs.size();
+    }
+
+    public class SongViewHolder extends RecyclerView.ViewHolder {
+        private ImageView ivSongImage;
+        private TextView tvSongTitle;
+        private TextView tvSongArtistName;
+
+        public SongViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivSongImage = (ImageView) itemView.findViewById(R.id.ivSongImage);
+            tvSongTitle = (TextView) itemView.findViewById(R.id.tvSongTitle);
+            tvSongArtistName = (TextView) itemView.findViewById(R.id.tvSongArtistName);
+        }
     }
 }
