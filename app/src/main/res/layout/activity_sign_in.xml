@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_signin"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@drawable/bg_signinup"
     tools:context=".activity.SignInActivity">
 
     <LinearLayout
@@ -14,13 +16,7 @@
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/bg_blur"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.415">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvSignIn"
@@ -30,14 +26,18 @@
             android:gravity="center"
             android:text="Sign In"
             android:textColor="@color/white"
-            android:textSize="34sp"
+            android:textSize="38sp"
             android:textStyle="bold" />
+
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:alpha="0.7"
             android:background="@drawable/bg_edittext_underline"
             android:drawableStart="@drawable/ic_mail"
@@ -47,26 +47,50 @@
             android:inputType="textEmailAddress"
             android:padding="15dp"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:alpha="0.7"
-            android:background="@drawable/bg_edittext_underline"
-            android:drawableStart="@drawable/ic_lock"
-            android:drawableEnd="@drawable/ic_eye_off"
-
-            android:drawablePadding="5dp"
-            android:ems="10"
-            android:gravity="center_vertical"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="15dp"
-            android:textColorHint="@color/white"
-            android:textSize="20sp" />
+            android:textColor="@color/yellow"
+            android:visibility="gone"
+            android:layout_below="@id/etEmail"
+            android:layout_marginTop="8dp" />
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:alpha="0.7"
+                android:background="@drawable/bg_edittext_underline"
+                android:drawableStart="@drawable/ic_lock"
+                android:drawablePadding="5dp"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="15dp"
+                android:textColorHint="@color/white"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/passwordIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:src="@drawable/ic_show"
+                android:adjustViewBounds="true"
+                android:layout_marginEnd="10dp"
+                />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvPwError"
@@ -74,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/etPassword"
             android:layout_marginTop="8dp"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@color/yellow"
             android:visibility="gone" />
 
         <TextView
@@ -129,4 +153,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

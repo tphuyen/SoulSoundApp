@@ -13,8 +13,12 @@ import com.project.soulsoundapp.model.Song;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.project.soulsoundapp.activity.SignUpActivity;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
+    private Context context;
     private static DatabaseHelper instance;
+  
     private static final String DATABASE_NAME = "soulsound.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TAG = "DatabaseHelper";
@@ -56,6 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE users(email TEXT primary key, name TEXT,  password TEXT)");
+
 //        Create songs table
         String CREATE_SONGS_TABLE = "CREATE TABLE " + TABLE_SONG + " ( " +
             KEY_SONG_ID + " TEXT PRIMARY KEY, " +
@@ -75,8 +81,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if(oldVersion != newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONG);
-            onCreate(db);
+          db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONG);
+          db.execSQL("DROP TABLE IF EXISTS users");
+          onCreate(db); 
+        }
+    }
+
+    public boolean insertatata(Context context, String email,String name,  String password){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("email", email);
+        contentValues.put("name", name);
+        contentValues.put("password", password);
+        long result = myDB.insert("users",null, contentValues);
+        if (result==-1)return false;
+        else {
+            return true;
+        }
+    }
+
+    public boolean checkMail(String mail){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        Cursor cursor = myDB.rawQuery("SELECT * FROM users where email = ?", new String[]{mail});
+        if(cursor.getCount()>0)
+            return true;
+        else return false;
+    }
+
+    public boolean checkUser(String mail, String password){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        Cursor cursor = myDB.rawQuery("SELECT * FROM users where email = ? and password=?", new String[]{mail, password});
+        if(cursor.getCount()>0)
+            return true;
+        else return false;
+    }
+
+    public boolean updatePw(String email, String password){
+        SQLiteDatabase myDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("password", password);
+        long result = myDB.update("users", contentValues, "email = ?", new String[]{email});
+        if (result==-1)return false;
+        else {
+            return true;
         }
     }
 
