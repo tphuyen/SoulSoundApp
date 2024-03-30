@@ -69,12 +69,12 @@ public class SearchFragment extends Fragment {
 
     public List<Category> getListCategories() {
         List<Category> categories = new ArrayList<Category>();
-        categories.add(new Category(R.drawable.kpop, "KPOP", R.color.grey));
-        categories.add(new Category(R.drawable.kpop, "VPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.kpop, "POP", R.color.sky_blue));
-        categories.add(new Category(R.drawable.kpop, "AAA", R.color.grey));
-        categories.add(new Category(R.drawable.kpop, "KPOP", R.color.grey));
-        categories.add(new Category(R.drawable.kpop, "VPOP", R.color.light_blue));
+        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));
+        categories.add(new Category(R.drawable.img_kpop, "VPOP", R.color.light_blue));
+        categories.add(new Category(R.drawable.img_kpop, "POP", R.color.sky_blue));
+        categories.add(new Category(R.drawable.img_kpop, "AAA", R.color.grey));
+        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));
+        categories.add(new Category(R.drawable.img_kpop, "VPOP", R.color.light_blue));
         return categories;
     }
 }

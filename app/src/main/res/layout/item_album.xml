@@ -9,7 +9,7 @@
         android:id="@+id/ivImgAlbum"
         android:layout_width="130dp"
         android:layout_height="130dp"
-        android:src="@drawable/kpop"
+        android:src="@drawable/img_kpop"
         />
     <TextView
         android:id="@+id/tvNameAlbum"

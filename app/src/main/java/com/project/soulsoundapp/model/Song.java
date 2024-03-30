@@ -115,4 +115,12 @@ public class Song implements Serializable {
     public void setLyricUrl(String lyricUrl) {
         this.lyricUrl = lyricUrl;
     }
+  
+      @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Song song = (Song) obj;
+        return id == song.id;
+    }
 }
