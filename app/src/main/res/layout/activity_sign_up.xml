@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    android:background="@drawable/bg_signin"
+    android:background="@drawable/bg_signinup"
     tools:context=".activity.SignUpActivity">
 
     <LinearLayout
@@ -16,7 +16,8 @@
         android:layout_marginHorizontal="20dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/bg_blur">
+        android:background="@drawable/bg_blur"
+        >
 
         <TextView
             android:id="@+id/tvSignIn"
@@ -36,11 +37,14 @@
             android:layout_margin="10dp"
             android:alpha="0.7"
             android:background="@drawable/bg_edittext_underline"
+            android:drawableStart="@drawable/ic_user"
+            android:drawablePadding="5dp"
             android:ems="10"
             android:hint="Full name"
             android:inputType="text"
             android:padding="15dp"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
         <EditText
@@ -57,26 +61,41 @@
             android:inputType="textEmailAddress"
             android:padding="15dp"
             android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow"
+            android:visibility="gone"
+            android:layout_below="@id/etEmail"
+            android:layout_marginTop="8dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="70dp">
+
             <EditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+
+                android:layout_marginBottom="10dp"
                 android:alpha="0.7"
                 android:background="@drawable/bg_edittext_underline"
                 android:drawableStart="@drawable/ic_lock"
-
                 android:drawablePadding="5dp"
                 android:ems="10"
                 android:gravity="center_vertical"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="15dp"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="20sp" />
             <ImageView
@@ -97,7 +116,7 @@
             android:id="@+id/tvPwError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@color/yellow"
             android:visibility="gone"
             android:layout_below="@id/etPassword"
             android:layout_marginTop="8dp" />
@@ -105,20 +124,27 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="70dp">
+
             <EditText
                 android:id="@+id/etConfirmPw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:alpha="0.7"
                 android:background="@drawable/bg_edittext_underline"
+                android:drawableStart="@drawable/ic_confirm_password"
+                android:drawablePadding="5dp"
                 android:ems="10"
                 android:gravity="center_vertical"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
                 android:padding="15dp"
+                android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
             <ImageView
                 android:id="@+id/ConfirmPwIcon"
                 android:layout_width="40dp"
@@ -138,7 +164,7 @@
             android:id="@+id/tvCheckPw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/holo_red_dark"
+            android:textColor="@color/yellow"
             android:visibility="gone"
             android:layout_below="@id/etConfirmPw"
             android:layout_marginTop="8dp" />
@@ -176,6 +202,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:onClick="moveToSignIn"
                 android:text="Sign in"
                 android:textColor="@color/sky_blue"
                 android:textSize="16sp"

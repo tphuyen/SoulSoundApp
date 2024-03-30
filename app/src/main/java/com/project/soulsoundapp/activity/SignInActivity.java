@@ -18,7 +18,7 @@ import com.project.soulsoundapp.helper.DatabaseHelper;
 public class SignInActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private ImageView passwordIcon;
-    private TextView tvPwError;
+    private TextView tvPwError, tvEmailError;
     private Button btnSignIn;
     private final int counter = 6;
     private boolean passwordShowing = false;
@@ -32,6 +32,7 @@ public class SignInActivity extends AppCompatActivity {
         btnSignIn = findViewById(R.id.btnSignIn);
         tvPwError = findViewById(R.id.tvPwError);
         passwordIcon = findViewById(R.id.passwordIcon);
+        tvEmailError = findViewById(R.id.tvEmailError);
 
 
         // Set a click listener for the login button
@@ -50,6 +51,14 @@ public class SignInActivity extends AppCompatActivity {
 //                    tvPwError.setVisibility(View.GONE);
 //                }
                 // Implement authentication logic here
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                if (!email.matches(emailPattern)) {
+                    tvEmailError.setVisibility(View.VISIBLE);
+                    tvEmailError.setText("Invalid email format");
+                    return;
+                }else {
+                    tvEmailError.setVisibility(View.GONE);
+                }
                 if(email.equals("") || password.equals("")){
                     Toast.makeText(SignInActivity.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
                 }else{
@@ -83,7 +92,7 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    public void moveToSignUp(View view){
+    public void moveToSignUp(View view ){
         Intent i = new Intent( this, SignUpActivity.class);
         startActivity(i);
     }

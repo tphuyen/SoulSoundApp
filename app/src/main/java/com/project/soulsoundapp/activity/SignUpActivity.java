@@ -19,7 +19,7 @@ import com.project.soulsoundapp.helper.DatabaseHelper;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText etName, etEmail, etPassword, etConfirmPw;
-    private TextView tvPwError, tvCheckPw;
+    private TextView tvPwError, tvCheckPw, tvEmailError;
     private ImageView passwordIcon, ConfirmPwIcon;
     private Button btnSignUp;
     private final int counter = 6;
@@ -32,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
+        tvEmailError = findViewById(R.id.tvEmailError);
         etPassword = findViewById(R.id.etPassword);
         etConfirmPw = findViewById(R.id.etConfirmPw);
         btnSignUp = findViewById(R.id.btnSignUp);
@@ -49,15 +50,27 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String confirmpw = etConfirmPw.getText().toString();
 
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$!%^&*()_+\\-={}\\[\\]|;:\"'<>,.?/\\\\]).{8,24}$";
+                if (!email.matches(emailPattern)) {
+                    tvEmailError.setVisibility(View.VISIBLE);
+                    tvEmailError.setText("Invalid email format");
+                    return;
+                }else {
+                    tvEmailError.setVisibility(View.GONE);
+                }
                 if(name.equals("") || email.equals("") || password.equals("") || confirmpw.equals("")){
                     Toast.makeText(SignUpActivity.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
                 }else {
+                    if(!password.matches(passwordPattern)){
+                        tvPwError.setVisibility(View.VISIBLE);
+                        tvPwError.setText("Password must be at least 8 characters long \nSpecial characters \nUppercase & lowercase characters");
+                        return;
+                    }else {
+                        tvPwError.setVisibility(View.GONE);
+                    }
 //                    if(password.length()<counter && confirmpw.length()<counter){
-//                        tvPwError.setVisibility(View.VISIBLE);
-//                        tvPwError.setText("Password must be at least "+ counter+" characters long");
-//                        return;
-//                    }else {
-//                        tvPwError.setVisibility(View.GONE);
+//
 //                    }
                     if (password.equals(confirmpw)) {
                         boolean checkUserEmail = databaseHelper.checkMail(email);
@@ -113,5 +126,9 @@ public class SignUpActivity extends AppCompatActivity {
                 etConfirmPw.setSelection(etConfirmPw.length());
             }
         });
+    }
+    public void moveToSignIn(View view){
+        Intent i = new Intent( this, SignInActivity.class);
+        startActivity(i);
     }
 }
