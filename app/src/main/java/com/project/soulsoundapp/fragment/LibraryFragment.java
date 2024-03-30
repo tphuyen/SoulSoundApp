@@ -64,15 +64,15 @@ public class LibraryFragment extends Fragment {
     }
 
 
-    public List<Playlist> getListPlaylists() {
-        List<Playlist> playlists = new ArrayList<Playlist>();
-        playlists.add(new Playlist("Playlist 1", R.drawable.img_kpop, 10));
-        playlists.add(new Playlist("Playlist 2", R.drawable.img_kpop, 15));
-        playlists.add(new Playlist("Playlist 3", R.drawable.img_kpop, 20));
-        playlists.add(new Playlist("Playlist 4", R.drawable.img_kpop, 25));
-        playlists.add(new Playlist("Playlist 5", R.drawable.img_kpop, 30));
-        return playlists;
-    }
+//    public List<Playlist> getListPlaylists() {
+//        List<Playlist> playlists = new ArrayList<Playlist>();
+//        playlists.add(new Playlist("Playlist 1", R.drawable.img_kpop, 10));
+//        playlists.add(new Playlist("Playlist 2", R.drawable.img_kpop, 15));
+//        playlists.add(new Playlist("Playlist 3", R.drawable.img_kpop, 20));
+//        playlists.add(new Playlist("Playlist 4", R.drawable.img_kpop, 25));
+//        playlists.add(new Playlist("Playlist 5", R.drawable.img_kpop, 30));
+//        return playlists;
+//    }
   
     private void getAllPlaylists() {
         ApiService.apiService.getAllPlaylists().enqueue(new Callback<ApiService.PlaylistResponse>() {

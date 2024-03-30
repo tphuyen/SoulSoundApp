@@ -48,7 +48,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:shapeAppearanceOverlay="@style/circula"
-            app:srcCompat="@drawable/kpop"
+            app:srcCompat="@drawable/img_kpop"
             android:padding="5dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/black"

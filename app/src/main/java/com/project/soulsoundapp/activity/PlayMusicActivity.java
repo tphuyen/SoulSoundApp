@@ -56,6 +56,7 @@ public class PlayMusicActivity extends AppCompatActivity {
 
     private List<Comment> comments;
     private LyricManager lyricManager;
+    private static final String TAG = "PlayMusicActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,14 @@ public class PlayMusicActivity extends AppCompatActivity {
         song = (Song) getIntent().getSerializableExtra("song");
         mediaPlayerService.playSong(MediaPlayerService.getCurrentPlaylist().indexOf(song));
 
+        addControls();
+        addEvents();
+
+        updateUI();
+
+    }
+
+    private void addControls() {
         ibBack = findViewById(R.id.ibBack);
         ivBackground = findViewById(R.id.ivBackground);
         tvTitle = findViewById(R.id.tvTitle);
@@ -75,20 +84,11 @@ public class PlayMusicActivity extends AppCompatActivity {
         tvStartTime = findViewById(R.id.tvStartTime);
         tvEndTime = findViewById(R.id.tvEndTime);
         ibPlayPause = findViewById(R.id.ibPlayPause);
-
-        setupUI();
-        updateUI();
+        ibMenu = findViewById(R.id.ibMenu);
+        ibShuffle = findViewById(R.id.ibShuffle);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mediaPlayerService != null) {
-            updateUI();
-        }
-    }
-
-    private void setupUI() {
+    private void addEvents() {
         setupBackBtn();
         setupSeekBar();
         togglePlayPauseBtn();
@@ -98,6 +98,14 @@ public class PlayMusicActivity extends AppCompatActivity {
         setupShuffleBtn();
         setupLyricsBtn();
         setupMenuBtn();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mediaPlayerService != null) {
+            updateUI();
+        }
     }
 
     private void updateUI() {
@@ -128,28 +136,14 @@ public class PlayMusicActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar sbSongProgress) {
                 mediaPlayerService.resumeSong();
                 updatePlayPauseButton();
-        addControls();
-        addEvents();
-        setupMenuButton();
-        setupLyricsButton();
-        handleBackButton();
+            }
+        });
     }
 
-    private void addEvents() {
-//        tvComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDialog();
-//            }
-//        });
-    }
 
-    private void addControls() {
-//        tvComment = findViewById(R.id.tvComment);
-    }
 
-    private void setupMenuButton() {
-        ImageButton ibMenu = findViewById(R.id.ibMenu);
+
+    private void setupMenuBtn() {
         ibMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +167,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void showCommentDialog() {
         final Dialog dialog = new Dialog(this);
@@ -245,42 +240,6 @@ public class PlayMusicActivity extends AppCompatActivity {
             updateUI();
         });
     }
-    private void setupLyricsButton() {
-        btnLyrics = findViewById(R.id.btnLyrics);
-        btnLyrics.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(PlayMusicActivity.this, R.style.TransparentDialog);
-                View view = getLayoutInflater().inflate(R.layout.dialog_lyrics, null);
-                TextView tvLyrics = view.findViewById(R.id.tvLyrics);
-                Button btnCloseLyrics = view.findViewById(R.id.btnCloseLyrics);
-
-                lyricManager = new LyricManager(PlayMusicActivity.this, tvLyrics);
-
-                lyricManager.setLyricLoadListener(new LyricManager.LyricLoadListener() {
-                    @Override
-                    public void onLyricsLoaded(String[] lyrics) {
-                        String lyricsText = String.join("\n", lyrics);
-                        tvLyrics.setText(lyricsText);
-                    }
-                });
-
-                lyricManager.loadLyricsFromUrl("https://music-player.sgp1.digitaloceanspaces.com/song_lyric/Z7UUAFUF.lrc");
-
-                btnCloseLyrics.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-
-                // Hiển thị dialog
-                bottomSheetDialog.setContentView(view);
-                bottomSheetDialog.show();
-            }
-        }
-    }
-
 
     public void setupNextBtn() {
         ibNext = findViewById(R.id.ibNext);
@@ -315,7 +274,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     public void setupShuffleBtn() {
-        ibShuffle = findViewById(R.id.ibShuffle);
         ibShuffle.setOnClickListener(v -> {
             isShuffle = !isShuffle;
             mediaPlayerService.setShuffle(!isShuffle);
@@ -365,18 +323,6 @@ public class PlayMusicActivity extends AppCompatActivity {
         });
     }
 
-    private void setupMenuBtn() {
-        ibMenu = findViewById(R.id.ibMenu);
-        ibMenu.setOnClickListener(v -> {
-            Dialog dialog = new Dialog(PlayMusicActivity.this, R.style.TransparentDialog);
-            @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.dialog_menu, null);
-            dialog.setContentView(view);
-            Objects.requireNonNull(dialog.getWindow()).setGravity(Gravity.CENTER);
-            dialog.getWindow().setDimAmount(0.4f);
-            dialog.show();
-        });
-    }
-
     private void updateSongInfo() {
         song = mediaPlayerService.getCurrentSong();
         tvTitle.setText(song.getTitle());
@@ -414,5 +360,4 @@ public class PlayMusicActivity extends AppCompatActivity {
         int seconds = (time % 60000) / 1000;
         return String.format("%02d:%02d", minutes, seconds);
     }
-
 }

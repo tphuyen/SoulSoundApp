@@ -30,19 +30,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         notifyDataSetChanged();
     }
 
-    public class SongViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivSongImage;
-        private TextView tvSongTitle;
-        private TextView tvSongArtistName;
-
-        public SongViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ivSongImage = itemView.findViewById(R.id.ivSongImage);
-            tvSongTitle = itemView.findViewById(R.id.tvSongTitle);
-            tvSongArtistName = itemView.findViewById(R.id.tvSongArtistName);
-        }
-    }
-
     @NonNull
     @Override
     public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
