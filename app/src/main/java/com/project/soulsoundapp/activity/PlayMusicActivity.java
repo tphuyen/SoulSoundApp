@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,9 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +31,9 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.service.ApiService;
 import com.project.soulsoundapp.service.MediaPlayerService;
+//import com.project.soulsoundapp.utils.CommentManager;
 import com.squareup.picasso.Picasso;
 import com.project.soulsoundapp.adapter.CommentAdapter;
 import com.project.soulsoundapp.model.Comment;
@@ -36,7 +43,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class PlayMusicActivity extends AppCompatActivity {
+//    VIEW OF COMMENT DIALOG
+    RecyclerView rvComments;
+    TextView tvNoComments;
+    ImageButton ibSend;
+
+    ImageButton ivClose;
+    EditText etComment;
 
     ImageView ivBackground, ivSongCover;
     TextView tvStartTime, tvEndTime, tvTitle, tvArtist, tvLyrics;
@@ -54,24 +72,23 @@ public class PlayMusicActivity extends AppCompatActivity {
     private static final int SHUFFLE_ICON = R.drawable.ic_shuffle;
     private static final int SHUFFLE_FILLED_ICON = R.drawable.ic_shuffle_filled;
 
-    private List<Comment> comments;
+    private List<Comment> mListComments;
     private LyricManager lyricManager;
+    private ProgressDialog mProgressDialog;
     private static final String TAG = "PlayMusicActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_music);
-
+        mListComments = new ArrayList<>();
         mediaPlayerService = new MediaPlayerService();
         song = (Song) getIntent().getSerializableExtra("song");
         mediaPlayerService.playSong(MediaPlayerService.getCurrentPlaylist().indexOf(song));
-
+        mProgressDialog = new ProgressDialog(this);
         addControls();
         addEvents();
-
         updateUI();
-
     }
 
     private void addControls() {
@@ -86,9 +103,20 @@ public class PlayMusicActivity extends AppCompatActivity {
         ibPlayPause = findViewById(R.id.ibPlayPause);
         ibMenu = findViewById(R.id.ibMenu);
         ibShuffle = findViewById(R.id.ibShuffle);
+        btnLyrics = findViewById(R.id.btnLyrics);
+
+//        commentManager = CommentManager.getInstance(getApplicationContext());
     }
 
     private void addEvents() {
+        btnLyrics.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                btnLyrics.setVisibility(View.GONE);
+                setupLyricsBtn();
+            }
+        });
         setupBackBtn();
         setupSeekBar();
         togglePlayPauseBtn();
@@ -96,7 +124,6 @@ public class PlayMusicActivity extends AppCompatActivity {
         setupPreviousBtn();
         setupFavoriteBtn();
         setupShuffleBtn();
-        setupLyricsBtn();
         setupMenuBtn();
     }
 
@@ -140,9 +167,6 @@ public class PlayMusicActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     private void setupMenuBtn() {
         ibMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,75 +184,123 @@ public class PlayMusicActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         dialog.cancel();
-                        showCommentDialog();
+                        getCommentAPI(song.getId());
                     }
                 });
 
             }
         });
     }
-
-
+//    BEGIN HANDLE COMMENT DIALOG
     private void showCommentDialog() {
+//        Init dialog
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_comments);
 
 //        Add Controls
-        RecyclerView rvComments = dialog.findViewById(R.id.rvComments);
-        ImageButton ivClose = dialog.findViewById(R.id.ivClose);
+        rvComments = dialog.findViewById(R.id.rvComments);
+        ivClose = dialog.findViewById(R.id.ivClose);
+        tvNoComments = dialog.findViewById(R.id.tvNoComments);
+        ibSend = dialog.findViewById(R.id.ibSend);
+        etComment = dialog.findViewById(R.id.etComment);
+
+        if(mListComments.size() > 0) {
+            CommentAdapter commentAdapter = new CommentAdapter(this);
+            commentAdapter.setComments(mListComments);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            rvComments.setLayoutManager(linearLayoutManager);
+            rvComments.setAdapter(commentAdapter);
+            rvComments.post(() -> {rvComments.smoothScrollToPosition(mListComments.size() - 1);});
+            tvNoComments.setVisibility(View.GONE);
+            rvComments.setVisibility(View.VISIBLE);
+        } else {
+            tvNoComments.setVisibility(View.VISIBLE);
+            rvComments.setVisibility(View.GONE);
+        }
 
 //        Add Events
         ivClose.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 dialog.cancel();
             }
         });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvComments.setLayoutManager(linearLayoutManager);
+        ibSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String content = etComment.getText().toString().trim();
+                if(content.length() > 0) {
+                    Comment comment = new Comment(song.getId(), "thangvb.dev@gmail.com", content);
+                    sendCommentAPI(comment);
+                }
 
-        Log.d("CommentAdapter", rvComments.toString());
-        CommentAdapter commentAdapter = new CommentAdapter(this);
-        comments = new ArrayList<Comment>();
-        comments.add(new Comment("1", "1", "Hay quá má ơi 01"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 02"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 03"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 04"));
-        comments.add(new Comment("1", "1", "Hay quá má ơi 01"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 02"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 03"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 04"));
-        comments.add(new Comment("1", "1", "Hay quá má ơi 01"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 02"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 03"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 04"));
-        comments.add(new Comment("1", "1", "Hay quá má ơi 01"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 02"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 03"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 04"));
-        comments.add(new Comment("1", "1", "Hay quá má ơi 01"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 02"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 03"));
-        comments.add(new Comment("2", "2", "Chán quá má ơi 04"));
 
-        commentAdapter.setComments(comments);
-
-        rvComments.setAdapter(commentAdapter);
+            }
+        });
 
 //        Config and show the layout comments
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         params.windowAnimations = R.style.DialogAnimation;
         params.gravity = Gravity.BOTTOM;
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setAttributes(params);
         dialog.show();
     }
+
+    private void sendCommentAPI(Comment comment) {
+        ApiService.apiService.sendCommentByIdSong(song.getId(), comment)
+                .enqueue(new Callback<ApiService.ApiResponse<List<Comment>>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<List<Comment>>> call, Response<ApiService.ApiResponse<List<Comment>>> response) {
+                        mListComments = response.body().getData();
+                        if(mListComments.size() > 0) {
+                            CommentAdapter commentAdapter = new CommentAdapter(getApplicationContext());
+                            commentAdapter.setComments(mListComments);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                            rvComments.setLayoutManager(linearLayoutManager);
+                            rvComments.setAdapter(commentAdapter);
+                            etComment.setText("");
+                            etComment.clearFocus();
+                            rvComments.post(() -> {rvComments.smoothScrollToPosition(mListComments.size() - 1);});
+                            InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(etComment.getWindowToken(), 0);
+                        }
+                        Log.d(TAG, "Post Comment Successfully");
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<List<Comment>>> call, Throwable throwable) {
+                        Log.d(TAG, "Post Comment Failed: " + throwable.getMessage());
+                    }
+                });
+    }
+
+    private void getCommentAPI(String id) {
+        mProgressDialog.show();
+        ApiService.apiService.getCommentsBySongId(id)
+                .enqueue(new Callback<ApiService.ApiResponse<List<Comment>>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<List<Comment>>> call, Response<ApiService.ApiResponse<List<Comment>>> response) {
+                        mListComments = response.body().getData();
+                        mProgressDialog.dismiss();
+                        showCommentDialog();
+                        Log.d(TAG, "[Comment::" + song.getId() + "] Called API successfully");
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<List<Comment>>> call, Throwable throwable) {
+                        mProgressDialog.dismiss();
+                        Log.e(TAG, "[Comment] Called API DB failed : " + throwable.getMessage());
+                    }
+                });
+    }
+
+//    END HANDLE COMMENT DIALOG
+
 
     public void togglePlayPauseBtn() {
         ibPlayPause.setOnClickListener(v -> {
@@ -286,41 +358,36 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void setupLyricsBtn() {
-        btnLyrics = findViewById(R.id.btnLyrics);
-        btnLyrics.setOnClickListener(v -> {
-            bottomSheetDialog = new BottomSheetDialog(PlayMusicActivity.this, R.style.TransparentDialog);
-            @SuppressLint("InflateParams") View view = getLayoutInflater().inflate(R.layout.dialog_lyrics, null);
-            tvLyrics = view.findViewById(R.id.tvLyrics);
-            btnCloseLyrics = view.findViewById(R.id.btnCloseLyrics);
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_lyrics);
 
-            // Your lyrics data...
-            String[] lyrics = {
-                    "This is the first line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    "This is the second line of the song",
-                    // ... more lyrics ...
-            };
+//        Add controls
+        ImageButton ibCloseLyric = dialog.findViewById(R.id.ibCloseLyric);
+        TextView tvLyric = dialog.findViewById(R.id.tvLyric);
 
-            // Join the lyrics with a newline character
-            String lyricsText = String.join("\n", lyrics);
+//        Add events
+        ibCloseLyric.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+                btnLyrics.setVisibility(View.VISIBLE);
+            }
 
-            tvLyrics.setText(lyricsText);
-
-            // Set the dialog to be cancelable
-            bottomSheetDialog.setCancelable(true);
-
-            // Set an OnClickListener for the close button
-            btnCloseLyrics.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
-
-            bottomSheetDialog.setContentView(view);
-            bottomSheetDialog.show();
         });
+
+//        Set lyric
+        lyricManager = new LyricManager(getApplicationContext(), tvLyric, mediaPlayerService);
+        lyricManager.loadLyric(song.getLyricUrl());
+//        Display lyrics
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.windowAnimations = R.style.DialogAnimation;
+        params.gravity = Gravity.BOTTOM;
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setAttributes(params);
+        dialog.show();
     }
 
     private void updateSongInfo() {

@@ -56,7 +56,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardcodedText,RtlSymmetry,TouchTargetSizeCheck" />
 
+            <include
+                android:id="@+id/itemFavourite"
+                layout="@layout/item_playlist"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="20dp"
                 android:id="@+id/rvPlaylists"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

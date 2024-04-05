@@ -1,34 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:padding="16dp"
     android:orientation="vertical"
-    android:background="@android:color/transparent">
+    android:background="@drawable/bg_dialog">
 
-    <Button
-        android:id="@+id/btnCloseLyrics"
+<!--    <Button-->
+<!--        android:id="@+id/btnCloseLyrics"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:background="@drawable/btn_background"-->
+<!--        android:drawableStart="@drawable/ic_music_sign"-->
+<!--        android:drawableEnd="@drawable/ic_arrow_down"-->
+<!--        android:drawablePadding="25dp"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:paddingStart="25dp"-->
+<!--        android:paddingEnd="25dp"-->
+<!--        android:text="Lyrics"-->
+<!--        android:textSize="20dp" />-->
+
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/white"-->
+<!--        android:padding="16dp">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvLyrics"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="16sp" />-->
+<!--    </ScrollView>-->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@drawable/btn_background"
-        android:drawableStart="@drawable/ic_music_sign"
-        android:drawableEnd="@drawable/ic_arrow_down"
-        android:drawablePadding="25dp"
-        android:gravity="center_vertical"
-        android:paddingStart="25dp"
-        android:paddingEnd="25dp"
-        android:text="Lyrics"
-        android:textSize="20dp" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="16dp">
-
+        android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tvLyrics"
+            android:id="@+id/tvLyricTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:text="Lyric"
+            android:textColor="@color/black"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/ibCloseLyric"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <ImageButton
+            android:id="@+id/ibCloseLyric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_close"
+            android:backgroundTintMode="screen"
+            />
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tvLyric"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </ScrollView>
+
 </LinearLayout>

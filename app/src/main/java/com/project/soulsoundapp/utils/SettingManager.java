@@ -34,23 +34,4 @@ public class SettingManager {
         }
         return instance;
     }
-
-    public void setDatabase() {
-        ApiService.apiService.getAllSongs().enqueue(new Callback<ApiService.MultupleResource>() {
-            @Override
-            public void onResponse(Call<ApiService.MultupleResource> call, Response<ApiService.MultupleResource> response) {
-                ApiService.MultupleResource resource = response.body();
-                List<Song> songs = new ArrayList<>(resource.getSongs());
-                for (Song song : songs) {
-//                    db.insertSong(song);
-                }
-                Toast.makeText(context.getApplicationContext(), resource.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<ApiService.MultupleResource> call, Throwable throwable) {
-                Toast.makeText(context.getApplicationContext(), throwable.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }

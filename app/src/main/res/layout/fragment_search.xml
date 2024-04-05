@@ -6,11 +6,18 @@
     android:orientation="vertical"
     tools:context=".fragment.SearchFragment">
 
-    <androidx.appcompat.widget.SearchView
+<!--    <androidx.appcompat.widget.SearchView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/icon_button"-->
+<!--        />-->
+    <EditText
+        android:id="@+id/etSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/icon_button" />
-
+        android:layout_height="100dp"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        />
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,17 +29,19 @@
             android:orientation="vertical"
             android:gravity="center_horizontal"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCategories"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:layout_marginTop="20dp"
+                android:visibility="visible"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvResultsForSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-
 </LinearLayout>
