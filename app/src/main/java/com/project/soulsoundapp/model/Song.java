@@ -2,7 +2,6 @@ package com.project.soulsoundapp.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
-import java.util.List;
 
 public class Song implements Serializable {
     @SerializedName("id")
@@ -116,11 +115,11 @@ public class Song implements Serializable {
         this.lyricUrl = lyricUrl;
     }
   
-      @Override
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Song song = (Song) obj;
-        return id == song.id;
+        return id.equals(song.id);
     }
 }
