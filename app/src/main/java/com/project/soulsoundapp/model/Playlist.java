@@ -92,4 +92,8 @@ public class Playlist implements Serializable {
     public void setPlaylistSongs(List<String> playlistSongs) {
         this.playlistSongs = playlistSongs;
     }
+
+    public String toString() {
+        return String.format(playlistTitle + " have " + playlistSongs.size() + " songs");
+    }
 }

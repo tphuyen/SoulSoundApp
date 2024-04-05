@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Comment of track"
+            android:text="Comments"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@id/ivClose"
@@ -30,7 +30,14 @@
             android:backgroundTintMode="screen"
             />
     </RelativeLayout>
-
+    <TextView
+        android:id="@+id/tvNoComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No comments yet, be the first one."
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:visibility="visible" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"
         android:padding="8dp"
