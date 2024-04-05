@@ -1,6 +1,7 @@
 package com.project.soulsoundapp.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.model.Comment;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
     private List<Comment> comments;
@@ -45,11 +46,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             return;
         }
 
-        Log.d("CommentAdapter", comment.getContent());
-        Log.d("CommentAdapter", "Here");
-
 //        Set image
-        holder.tvUserName.setText(comment.getUserId());
+        String initial = comment.getEmail().substring(0, 1).toUpperCase();
+        Picasso.get().load("https://music-player.sgp1.digitaloceanspaces.com/song_thumbnail/Z7U00WDEx96.jpg").into(holder.siUserAvatar);
+
+//        Drawable drawable = Drawable.
+
+//        holder.siUserAvatar.setIm()
+
+        holder.tvUserName.setText(comment.getEmail());
         holder.tvContent.setText(comment.getContent());
     }
 
@@ -63,11 +68,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         private ImageView ivUserAvatar;
         private TextView tvUserName;
         private TextView tvContent;
+        private ShapeableImageView siUserAvatar;
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
+//            ivUserAvatar = itemView.findViewById(R.id.ivUserAvatar);
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvContent = itemView.findViewById(R.id.tvContent);
+            siUserAvatar = itemView.findViewById(R.id.siUserAvatar);
         }
     }
 }

@@ -39,22 +39,24 @@ public class PlaylistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
-        playlist = (Playlist) getIntent().getSerializableExtra("playlist");
-        db = DatabaseHelper.getInstance(getApplicationContext());
-        songs = new ArrayList<>();
+
         addControls();
         addEvents();
     }
 
     public void addControls() {
+        playlist = (Playlist) getIntent().getSerializableExtra("playlist");
+        db = DatabaseHelper.getInstance(getApplicationContext());
+        songs = new ArrayList<>();
+
         tvTitle = findViewById(R.id.tvTitle);
         ibReturn = findViewById(R.id.ibReturn);
         ivPlaylistImage = findViewById(R.id.ivPlaylistImage);
         rvSongsList = findViewById(R.id.rvSongsList);
 
+//        Set layout RecyclerView
         LinearLayoutManager managerSongs = new LinearLayoutManager(this);
         rvSongsList.setLayoutManager(managerSongs);
-
         getListSongs();
     }
 
@@ -84,7 +86,6 @@ public class PlaylistActivity extends AppCompatActivity {
             setSongsList(songs);
             updateIntentData();
         } else {
-            // Xử lý trường hợp db chưa được khởi tạo
             Toast.makeText(getApplicationContext(), "Database is not initialized", Toast.LENGTH_SHORT).show();
         }
     }

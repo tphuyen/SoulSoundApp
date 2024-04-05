@@ -1,17 +1,16 @@
 package com.project.soulsoundapp.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.UUID;
 
 public class User {
-    private String userId;
     private String email;
     private String fullName;
-    private String password;
 
-    // Constructors
-    public User() {
-        // Khởi tạo userId
-        this.userId = UUID.randomUUID().toString();
+    public User(String email, String fullName) {
+        this.email = email;
+        this.fullName = fullName;
     }
 
     public User(String userId, String email, String fullName, String password) {
@@ -22,13 +21,6 @@ public class User {
     }
 
     // Getters and Setters
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getEmail() {
         return email;
@@ -46,21 +38,12 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
                 ", email='" + email + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }
