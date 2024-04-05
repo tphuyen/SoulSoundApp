@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -21,10 +20,16 @@ public class MediaPlayerService extends MediaBrowserService {
     private static MediaPlayer player;
     private int currentSongIndex = 0;
     private boolean isShuffle = false;
+    private static MediaPlayerService instance;
 
     public MediaPlayerService() {
+        instance = this;
         db = DatabaseHelper.getInstance(this);
         songs = initSongs();
+    }
+
+    public static MediaPlayerService getInstance() {
+        return instance;
     }
 
     public void setShuffle(boolean isShuffle) {
@@ -113,4 +118,5 @@ public class MediaPlayerService extends MediaBrowserService {
             player = null;
         }
     }
+
 }
