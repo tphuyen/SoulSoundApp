@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +14,13 @@ import android.widget.Toast;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 
+import java.util.Random;
+
 public class ForgetPassword extends AppCompatActivity {
     TextView tvForgotPw, tvEmailReset, tvBackSignIn;
     EditText etEmailReset;
     Button btnReset;
+    int code;
     DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +40,7 @@ public class ForgetPassword extends AppCompatActivity {
                 String email = etEmailReset.getText().toString();
                 boolean checkUserEmail = databaseHelper.checkMail(email);
                 if(checkUserEmail){
-                    Intent intent = new Intent(getApplicationContext(), ResetPasswordActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), VerifyCodeActivity.class);
                     intent.putExtra("email",email);
                     startActivity(intent);
                 }else {
