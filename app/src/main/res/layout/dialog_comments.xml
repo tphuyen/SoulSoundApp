@@ -69,9 +69,9 @@
 
         <ImageButton
             android:id="@+id/ibSend"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_sent"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_send"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:backgroundTintMode="screen"/>

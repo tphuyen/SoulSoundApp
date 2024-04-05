@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.*;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.*;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.adapter.CategoryAdapter;
@@ -20,6 +22,8 @@ import java.util.List;
 public class SearchFragment extends Fragment {
 
     private RecyclerView rvCategories;
+    private EditText etSearch;
+    private ImageView ivCloseIcon;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -41,6 +45,7 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         addControl(view);
+        addEvent(view);
     }
 
     public void addControl(View view) {
@@ -63,10 +68,18 @@ public class SearchFragment extends Fragment {
         rvCategories.setAdapter(categoryAdapter);
     }
 
-    public void addEvent() {
+    public void addEvent(View view) {
+        etSearch = view.findViewById(R.id.etSearch);
+        ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
 
+        ivCloseIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etSearch.setText("");
+                etSearch.clearFocus();
+            }
+        });
     }
-
     public List<Category> getListCategories() {
         List<Category> categories = new ArrayList<Category>();
         categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));

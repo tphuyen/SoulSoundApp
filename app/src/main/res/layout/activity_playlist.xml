@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/ScreenBackGround"
     tools:context=".activity.PlaylistActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clTop"
@@ -15,10 +16,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/ibReturn"
             android:layout_width="59dp"
             android:layout_height="47dp"
-            android:id="@+id/ibReturn"
-            android:src="@drawable/ic_launcher_foreground"
+            android:background="#00FFFFFF"
+            style="@style/ImageChange1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="From Search"
-            android:textColor="@android:color/black"
+            style="@style/TextColor"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +59,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTitle"
-                android:text="KPOP"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bá Thắng Vũ"/>
+                android:text="KPOP"
+                android:textSize="25sp"
+                style="@style/TextColor"
+                android:textStyle="bold"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSongsList"
                 android:layout_width="match_parent"

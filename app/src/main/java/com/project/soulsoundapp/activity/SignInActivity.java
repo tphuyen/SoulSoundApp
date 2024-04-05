@@ -3,8 +3,10 @@ package com.project.soulsoundapp.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,14 +16,20 @@ import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.model.User;
 
 public class SignInActivity extends AppCompatActivity {
+    private static final String TAG = "SignInActivity";
     private EditText etEmail, etPassword;
     private ImageView passwordIcon;
     private TextView tvPwError, tvEmailError;
     private Button btnSignIn;
     private final int counter = 6;
     private boolean passwordShowing = false;
+    SharedPreferences sharedPreferences;
+    private static final String SHARED_PREF_NAME = "mypref";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_EMAIL = "email";
     DatabaseHelper databaseHelper = new DatabaseHelper(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,7 @@ public class SignInActivity extends AppCompatActivity {
         passwordIcon = findViewById(R.id.passwordIcon);
         tvEmailError = findViewById(R.id.tvEmailError);
 
+//        String fullname = sharedPreferences.getString(KEY_NAME, null);
 
         // Set a click listener for the login button
         btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +51,11 @@ public class SignInActivity extends AppCompatActivity {
                 // Retrieve entered username and password
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                boolean isSignedIn = databaseHelper.checkUser(etEmail.getText().toString(), etPassword.getText().toString());
+                User u = databaseHelper.checkUser(email, password);
+
+                sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+
+
 //                if(password.length()<counter){
 //                    tvPwError.setVisibility(View.VISIBLE);
 //                    tvPwError.setText("Wrong password");
@@ -62,8 +75,14 @@ public class SignInActivity extends AppCompatActivity {
                 if(email.equals("") || password.equals("")){
                     Toast.makeText(SignInActivity.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
                 }else{
-                    if (isSignedIn) {
+                    if (u != null) {
                         // Successful login
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(KEY_NAME, u.getFullName());
+                        editor.putString(KEY_EMAIL, u.getEmail());
+                        editor.apply();
+
                         Toast.makeText(SignInActivity.this, "Sign In Successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(SignInActivity.this, MainActivity2.class);
                         startActivity(intent);

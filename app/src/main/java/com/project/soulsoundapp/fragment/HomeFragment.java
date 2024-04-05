@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
@@ -22,17 +23,22 @@ import android.view.ViewGroup;
 import com.project.soulsoundapp.Domian.SliderItems;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.adapter.AlbumAdpater;
+import com.project.soulsoundapp.adapter.HitSongAdapter;
 import com.project.soulsoundapp.adapter.SliderAdapter;
+import com.project.soulsoundapp.adapter.SongAdapter;
+import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Album;
+import com.project.soulsoundapp.model.Song;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 //import com.project.soulsoundapp.adapter.ImageSliderAdapter;
 public class HomeFragment extends Fragment {
-    private RecyclerView rvDiscover;
+    private RecyclerView rvDiscover, rvHitSong;
     private ViewPager2 viewPager2;
     private Handler slideHandler = new Handler();
+    private DatabaseHelper db;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,11 +61,11 @@ public class HomeFragment extends Fragment {
         sliderItems.add(new SliderItems(R.drawable.item2));
         sliderItems.add(new SliderItems(R.drawable.item3));
         sliderItems.add(new SliderItems(R.drawable.item4));
-    viewPager2.setAdapter(new SliderAdapter(sliderItems, viewPager2));
-    viewPager2.setClipToPadding(false);
-    viewPager2.setClipChildren(false);
-    viewPager2.setOffscreenPageLimit(3);
-    viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+        viewPager2.setAdapter(new SliderAdapter(sliderItems, viewPager2));
+        viewPager2.setClipToPadding(false);
+        viewPager2.setClipChildren(false);
+        viewPager2.setOffscreenPageLimit(3);
+        viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
 
         CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
         compositePageTransformer.addTransformer(new MarginPageTransformer(40));
@@ -106,15 +112,30 @@ public class HomeFragment extends Fragment {
 
 
     private void addControl(View view) {
+        db = DatabaseHelper.getInstance(view.getContext());
+
         rvDiscover = view.findViewById(R.id.rvDiscover);
         AlbumAdpater albumAdpater = new AlbumAdpater(getContext());
         albumAdpater.setAlbums(laydulieu());
-
         LinearLayoutManager managerDiscover = new LinearLayoutManager(getContext());
         managerDiscover.setOrientation(LinearLayoutManager.HORIZONTAL);
-
         rvDiscover.setLayoutManager(managerDiscover);
         rvDiscover.setAdapter(albumAdpater);
+
+        rvHitSong = view.findViewById(R.id.rvHitSong);
+        SongAdapter songAdapter = new SongAdapter(getContext());
+        songAdapter.setSongs(getSong());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
+        gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+        rvHitSong.setLayoutManager(gridLayoutManager);
+        rvHitSong.setAdapter(songAdapter);
+    }
+
+    private List<Song> getSong() {
+        List<Song> songs = new ArrayList<>();
+        songs = db.getAllSongs();
+        return songs;
     }
 
     private List<Album> laydulieu() {

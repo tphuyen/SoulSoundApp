@@ -7,20 +7,17 @@
 
     style="@style/ScreenBackGround"
     tools:context=".fragment.SettingFragment">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Settings"
-            android:gravity="center_horizontal"
-            style="@style/TextColor"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Settings"
+        android:gravity="center_horizontal"
+        style="@style/TextColor"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -29,49 +26,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginVertical="20dp">
+            android:layout_marginVertical="40dp">
+
             <LinearLayout
+                android:id="@+id/llProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="30dp"
-                android:layout_marginVertical="20dp"
-                android:id="@+id/llProfile"
-                >
+                android:paddingHorizontal="30dp">
 
                 <ImageView
+                    android:id="@+id/ivUserAvatar"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/user"
                     android:layout_marginRight="20dp"
-                    />
+                    style="@style/ImageChange2"/>
+
                 <LinearLayout
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <TextView
+                        style="@style/TextColor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="User"
-                        style="@style/TextColor"
-                        android:textSize="20sp"
-                        />
+                        android:textSize="22sp" />
+
                     <TextView
+                        android:id="@+id/tvViewProfile"
+                        android:textColor="@color/icon_btn_nav"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:text="View profile"
-                        style="@style/TextColor"
-                        android:textSize="16sp"
                         android:layout_marginBottom="10dp"
-                        />
+                        android:text="View profile"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="120dp"
-                    android:src="@drawable/ic_next" />
             </LinearLayout>
 
             <LinearLayout
@@ -79,28 +72,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 android:padding="15dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="5dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="Night Mode"
-                        android:textSize="20sp"
+                        android:textSize="22sp"
                         style="@style/TextColor"
                         />
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchMode"
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
+                        android:switchMinWidth="20dp"
                         android:thumb="@drawable/thumb"
                         app:track="@drawable/track"
                         />
@@ -108,44 +102,67 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="15dp"
+                    android:paddingVertical="5dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="Night Mode"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
+                        android:text="Language"
+                        android:textSize="22sp"
+                        style="@style/TextColor"
                         />
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchModeLanguage"
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
+                        android:switchMinWidth="20dp"
+                        android:thumb="@drawable/thumb_language"
+                        app:track="@drawable/track_language"
+                        app:showText="true"
+                        android:textOn="@string/english"
+                        android:textOff="@string/vietnamese"
                         />
+
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="5dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="Night Mode"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
+                        android:text="Sleep timer"
+                        android:textSize="22sp"
+                        style="@style/TextColor"
                         />
-                    <Switch
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                    <ImageView
+                        android:id="@+id/ivSleepTimer"
+                        android:layout_width="38dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_alignParentEnd="true"
+                        style="@style/ImageChange"
                         android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
-                        />
+                        android:contentDescription="TODO" />
                 </RelativeLayout>
             </LinearLayout>
+            <Button
+                android:id="@+id/btnLogOut"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/btn_signup"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:text="Log out"
+                android:layout_marginTop="25dp"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </LinearLayout>
-
     </ScrollView>
 </FrameLayout>
