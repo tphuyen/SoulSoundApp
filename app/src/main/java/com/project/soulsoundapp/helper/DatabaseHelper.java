@@ -179,10 +179,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.moveToFirst()) {
             do {
                 u = new User(
-                        "1",
                         cursor.getString(cursor.getColumnIndex("email")),
-                        cursor.getString(cursor.getColumnIndex("name")),
-                        cursor.getString(cursor.getColumnIndex("password"))
+                        cursor.getString(cursor.getColumnIndex("name"))
                 );
             } while (cursor.moveToNext());
             Log.v(TAG, "End check true");
