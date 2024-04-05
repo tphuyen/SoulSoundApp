@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.SoulSoundApp"
+        android:theme="@style/Base.Theme.SoulSoundApp"
         tools:targetApi="31">
         <activity
             android:name=".activity.MainActivity2"
@@ -44,6 +44,9 @@
             android:name=".activity.PlayMusicActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -57,6 +60,9 @@
             android:exported="false" />
         <activity
             android:name=".activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SleepTimerActivity"
             android:exported="false" />
     </application>
 

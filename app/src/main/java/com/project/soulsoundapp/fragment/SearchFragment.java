@@ -31,6 +31,7 @@ import java.util.List;
 
 public class SearchFragment extends Fragment {
 
+    private ImageView ivCloseIcon;
     private RecyclerView rvCategories, rvResultsForSearch;
     private EditText etSearch;
 
@@ -86,12 +87,21 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
+      
+        ivCloseIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etSearch.setText("");
+                etSearch.clearFocus();
+            }
+        });
     }
 
     public void addControls(View view) {
         rvCategories =view.findViewById(R.id.rvCategories);
         rvResultsForSearch = view.findViewById(R.id.rvResultsForSearch);
         etSearch = view.findViewById(R.id.etSearch);
+        ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
 
         List<Category> categories = new ArrayList<>();
         categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
@@ -114,6 +124,18 @@ public class SearchFragment extends Fragment {
         categoryAdapter.setData(categories);
 
         rvCategories.setAdapter(categoryAdapter);
+    }
+
+
+    public List<Category> getListCategories() {
+        List<Category> categories = new ArrayList<Category>();
+        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));
+        categories.add(new Category(R.drawable.img_kpop, "VPOP", R.color.light_blue));
+        categories.add(new Category(R.drawable.img_kpop, "POP", R.color.sky_blue));
+        categories.add(new Category(R.drawable.img_kpop, "AAA", R.color.grey));
+        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));
+        categories.add(new Category(R.drawable.img_kpop, "VPOP", R.color.light_blue));
+        return categories; 
     }
 
     private void setResultForSearch(List<Song> songs) {

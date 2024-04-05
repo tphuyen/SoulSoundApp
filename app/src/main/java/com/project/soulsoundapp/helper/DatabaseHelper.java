@@ -10,6 +10,7 @@ import android.util.Log;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.User;
 import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean checkMail(String mail){
+    public Boolean checkMail(String mail){
         SQLiteDatabase myDB = this.getWritableDatabase();
         Cursor cursor = myDB.rawQuery("SELECT * FROM users where email = ?", new String[]{mail});
         if(cursor.getCount()>0)
@@ -169,12 +170,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return false;
     }
 
-    public boolean checkUser(String mail, String password){
+    public User checkUser(String mail, String password){
         SQLiteDatabase myDB = this.getWritableDatabase();
         Cursor cursor = myDB.rawQuery("SELECT * FROM users where email = ? and password=?", new String[]{mail, password});
-        if(cursor.getCount()>0)
-            return true;
-        else return false;
+        User u;
+        Log.v(TAG, "Start check");
+
+        if(cursor.moveToFirst()) {
+            do {
+                u = new User(
+                        "1",
+                        cursor.getString(cursor.getColumnIndex("email")),
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        cursor.getString(cursor.getColumnIndex("password"))
+                );
+            } while (cursor.moveToNext());
+            Log.v(TAG, "End check true");
+            return u;
+        }
+        else {
+            Log.v(TAG, "End check true");
+
+            return null;
+        }
     }
 
     public boolean updatePw(String email, String password){

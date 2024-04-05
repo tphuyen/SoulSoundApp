@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
-    tools:context=".activity.SettingActivity">
+    style="@style/ScreenBackGround"
+    tools:context=".activity.ProfileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clTop"
@@ -20,7 +20,8 @@
             android:id="@+id/ibBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_arrow_back"
+            style="@style/ImageChange1"
+            android:background="#00FFFFFF"
             android:contentDescription="Back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Profile"
-            android:textColor="@android:color/white"
+            style="@style/TextColor"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,56 +59,48 @@
                 android:id="@+id/ivUserImage"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:background="@drawable/bg_round_corner"
-                android:src="@color/icon_button" />
-
-            <TextView
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="KPOP"
-                android:textColor="@color/white" />
+                style="@style/ImageChange2" />
 
             <LinearLayout
                 android:id="@+id/llMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
+                android:padding="20dp"
                 app:layout_constraintTop_toBottomOf="@id/llHeader">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
-                    android:textColor="@color/white" />
+                    style="@style/TextColor"
+                    android:textSize="18sp"/>
 
-                <EditText
-                    android:id="@+id/etName"
+                <TextView
+                    android:id="@+id/tvName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="@color/white"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    android:layout_marginVertical="10dp"
+                    style="@style/TextColor"
+                    android:textSize="16sp"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Email"
-                    android:textColor="@color/white" />
+                    style="@style/TextColor"
+                    android:textSize="18sp"/>
 
-                <EditText
-                    android:id="@+id/etEmail"
+                <TextView
+                    android:id="@+id/tvEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/white"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-                <Button
-                    android:id="@+id/btnSave"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Save" />
+                    style="@style/TextColor"
+                    android:textSize="16sp"
+                    android:layout_marginVertical="10dp"
+                    />
+
 
             </LinearLayout>
         </LinearLayout>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/ScreenBackGround"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.HomeFragment">
     <androidx.core.widget.NestedScrollView
@@ -16,7 +17,7 @@
                 android:id="@+id/rvCarousel"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginVertical="30dp">
+                android:layout_marginTop="40dp">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewpagerSlider"
@@ -28,14 +29,54 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvDiscover"
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvHitSong"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="25dp"
+         >
+
+                <TextView
+                    android:id="@+id/tvDiscover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Discover"
+                    style="@style/TextColor"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginHorizontal="16dp"
+
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDiscover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="25dp"
+>
+
+                <TextView
+                    android:id="@+id/tvHitSong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hit song"
+                    style="@style/TextColor"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvHitSong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

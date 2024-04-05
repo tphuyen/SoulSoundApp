@@ -3,6 +3,7 @@ package com.project.soulsoundapp.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -22,8 +23,8 @@ public class SignUpActivity extends AppCompatActivity {
     private TextView tvPwError, tvCheckPw, tvEmailError;
     private ImageView passwordIcon, ConfirmPwIcon;
     private Button btnSignUp;
-    private final int counter = 6;
     private boolean passwordShowing = false;
+
 
     private DatabaseHelper databaseHelper;
     @Override
@@ -41,14 +42,17 @@ public class SignUpActivity extends AppCompatActivity {
         passwordIcon = findViewById(R.id.passwordIcon);
         ConfirmPwIcon = findViewById(R.id.ConfirmPwIcon);
         databaseHelper = new DatabaseHelper(this);
+
+
+
         btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 // Retrieve entered username and password
                 String name = etName.getText().toString();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
                 String confirmpw = etConfirmPw.getText().toString();
+
 
                 String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$!%^&*()_+\\-={}\\[\\]|;:\"'<>,.?/\\\\]).{8,24}$";
@@ -69,12 +73,9 @@ public class SignUpActivity extends AppCompatActivity {
                     }else {
                         tvPwError.setVisibility(View.GONE);
                     }
-//                    if(password.length()<counter && confirmpw.length()<counter){
-//
-//                    }
                     if (password.equals(confirmpw)) {
                         boolean checkUserEmail = databaseHelper.checkMail(email);
-                        if (checkUserEmail == false) {
+                        if (!checkUserEmail) {
                             boolean insert = databaseHelper.insertatata(view.getContext(), email, name, password);
 
                             if (insert) {
@@ -92,6 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
                         tvCheckPw.setText("Password not match");
                     }
                 }
+
             }
         });
 
