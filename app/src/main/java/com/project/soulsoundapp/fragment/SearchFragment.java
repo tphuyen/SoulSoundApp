@@ -17,6 +17,7 @@ import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.project.soulsoundapp.R;
@@ -124,18 +125,6 @@ public class SearchFragment extends Fragment {
         categoryAdapter.setData(categories);
 
         rvCategories.setAdapter(categoryAdapter);
-    }
-
-
-    public List<Category> getListCategories() {
-        List<Category> categories = new ArrayList<Category>();
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));
-        categories.add(new Category(R.drawable.img_kpop, "VPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.img_kpop, "POP", R.color.sky_blue));
-        categories.add(new Category(R.drawable.img_kpop, "AAA", R.color.grey));
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.grey));
-        categories.add(new Category(R.drawable.img_kpop, "VPOP", R.color.light_blue));
-        return categories; 
     }
 
     private void setResultForSearch(List<Song> songs) {
