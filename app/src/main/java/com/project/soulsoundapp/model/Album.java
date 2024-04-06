@@ -1,59 +1,28 @@
 package com.project.soulsoundapp.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class Album {
-    private String id;
-    private String title;
-    private Date release_date;
-    private String description;
-    private int thumbnail;
+public class Album implements Serializable {
+    @SerializedName("album_id")
+    private String albumId;
 
-    public Album(String id, String title, Date release_date, String description, int thumbnail) {
-        this.id = id;
-        this.title = title;
-        this.release_date = release_date;
-        this.description = description;
-        this.thumbnail = thumbnail;
-    }
+    @SerializedName("album_title")
+    private String albumTitle;
 
-    public String getId() {
-        return id;
-    }
+    @SerializedName("album_description")
+    private String albumDescription;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    @SerializedName("album_thumbnail")
+    private String albumThumbnail;
 
-    public String getTitle() {
-        return title;
-    }
+    @SerializedName("album_cover")
+    private String albumCover;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @SerializedName("album_songs")
+    private List<String> albumSongs;
 
-    public Date getRelease_date() {
-        return release_date;
-    }
-
-    public void setRelease_date(Date release_date) {
-        this.release_date = release_date;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
-    }
 }

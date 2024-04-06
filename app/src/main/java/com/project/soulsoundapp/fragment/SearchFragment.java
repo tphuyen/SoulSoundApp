@@ -74,13 +74,7 @@ public class SearchFragment extends Fragment {
                     if(key.trim().length() > 0) {
                         searchSongByTitle(v.getText().toString().trim());
                     } else {
-                        List<Category> categories = new ArrayList<>();
-                        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-                        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-                        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-                        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-                        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-                        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
+                        List<Category> categories = db.getAllCategories();
                         setCategories(categories);
                     }
                     return true;
@@ -104,13 +98,8 @@ public class SearchFragment extends Fragment {
         etSearch = view.findViewById(R.id.etSearch);
         ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
 
-        List<Category> categories = new ArrayList<>();
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
-        categories.add(new Category(R.drawable.img_kpop, "KPOP", R.color.light_blue));
+        List<Category> categories = db.getAllCategories();
+        Log.v(TAG, "" + categories.size());
         setCategories(categories);
     }
 

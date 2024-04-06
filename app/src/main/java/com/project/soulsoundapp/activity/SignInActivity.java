@@ -17,6 +17,11 @@ import android.widget.Toast;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.User;
+import com.project.soulsoundapp.service.ApiService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
@@ -51,19 +56,10 @@ public class SignInActivity extends AppCompatActivity {
                 // Retrieve entered username and password
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                User u = databaseHelper.checkUser(email, password);
+//                User u = databaseHelper.checkUser(email, password);
 
                 sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
 
-
-//                if(password.length()<counter){
-//                    tvPwError.setVisibility(View.VISIBLE);
-//                    tvPwError.setText("Wrong password");
-//                    return;
-//                }else {
-//                    tvPwError.setVisibility(View.GONE);
-//                }
-                // Implement authentication logic here
                 String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 if (!email.matches(emailPattern)) {
                     tvEmailError.setVisibility(View.VISIBLE);
@@ -75,21 +71,7 @@ public class SignInActivity extends AppCompatActivity {
                 if(email.equals("") || password.equals("")){
                     Toast.makeText(SignInActivity.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
                 }else{
-                    if (u != null) {
-                        // Successful login
-
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(KEY_NAME, u.getFullName());
-                        editor.putString(KEY_EMAIL, u.getEmail());
-                        editor.apply();
-
-                        Toast.makeText(SignInActivity.this, "Sign In Successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignInActivity.this, MainActivity2.class);
-                        startActivity(intent);
-                    } else {
-                        // Failed login
-                        Toast.makeText(SignInActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
-                    }
+                    login(email, password);
                 }
             }
         });
@@ -119,5 +101,37 @@ public class SignInActivity extends AppCompatActivity {
     public void moveToForgotPw(View view){
         Intent i = new Intent( this, ForgetPassword.class);
         startActivity(i);
+    }
+
+    private void login(String username, String password) {
+        User user;
+        ApiService.apiService.loginApi(username, password)
+                .enqueue(new Callback<ApiService.ApiResponse<User>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<User>> call, Response<ApiService.ApiResponse<User>> response) {
+                        if(response.isSuccessful()) {
+                            assert response.body() != null;
+                            User user = response.body().getData();
+                            setUser(user);
+                        }
+                        Toast.makeText(SignInActivity.this, "Here" + response.toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<User>> call, Throwable throwable) {
+                        Toast.makeText(SignInActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void setUser(User u) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_NAME, u.getFullName());
+        editor.putString(KEY_EMAIL, u.getEmail());
+        editor.apply();
+
+        Toast.makeText(SignInActivity.this, "Sign In Successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(SignInActivity.this, MainActivity2.class);
+        startActivity(intent);
     }
 }
