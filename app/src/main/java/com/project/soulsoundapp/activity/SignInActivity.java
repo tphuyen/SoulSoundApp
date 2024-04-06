@@ -18,6 +18,7 @@ import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.User;
 import com.project.soulsoundapp.service.ApiService;
+import com.project.soulsoundapp.utils.DataManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +36,8 @@ public class SignInActivity extends AppCompatActivity {
     private static final String SHARED_PREF_NAME = "mypref";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
-    DatabaseHelper databaseHelper = new DatabaseHelper(this);
+    DatabaseHelper db;
+    DataManager dataManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,8 @@ public class SignInActivity extends AppCompatActivity {
         tvPwError = findViewById(R.id.tvPwError);
         passwordIcon = findViewById(R.id.passwordIcon);
         tvEmailError = findViewById(R.id.tvEmailError);
+        db = DatabaseHelper.getInstance(getApplicationContext());
+        dataManager = DataManager.getInstance(getApplicationContext());
 
 //        String fullname = sharedPreferences.getString(KEY_NAME, null);
 
@@ -129,6 +133,9 @@ public class SignInActivity extends AppCompatActivity {
         editor.putString(KEY_NAME, u.getFullName());
         editor.putString(KEY_EMAIL, u.getEmail());
         editor.apply();
+
+//        Set favorite song
+        dataManager.setFavorites(u.getEmail(), u.getFavorites());
 
         Toast.makeText(SignInActivity.this, "Sign In Successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(SignInActivity.this, MainActivity2.class);

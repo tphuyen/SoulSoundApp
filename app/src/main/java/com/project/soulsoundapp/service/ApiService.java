@@ -1,25 +1,17 @@
 package com.project.soulsoundapp.service;
 
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import com.project.soulsoundapp.model.Album;
 import com.project.soulsoundapp.model.Category;
 import com.project.soulsoundapp.model.Comment;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Song;
 import com.project.soulsoundapp.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
@@ -28,7 +20,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface ApiService {
     class ApiResponse<T> {

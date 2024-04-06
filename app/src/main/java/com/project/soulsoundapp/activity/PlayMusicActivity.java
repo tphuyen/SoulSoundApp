@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Song;
 import com.project.soulsoundapp.service.ApiService;
 import com.project.soulsoundapp.service.MediaPlayerService;
@@ -76,6 +77,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private LyricManager lyricManager;
     private ProgressDialog mProgressDialog;
     private static final String TAG = "PlayMusicActivity";
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         song = (Song) getIntent().getSerializableExtra("song");
         mediaPlayerService.playSong(mediaPlayerService.getCurrentPlaylist().indexOf(song));
         mProgressDialog = new ProgressDialog(this);
+        db = DatabaseHelper.getInstance(getApplicationContext());
         addControls();
         addEvents();
         updateUI();
@@ -337,11 +340,11 @@ public class PlayMusicActivity extends AppCompatActivity {
     private void setupFavoriteBtn() {
         ibFavorite = findViewById(R.id.ibFavorite);
         ibFavorite.setOnClickListener(v -> {
-            if (databaseHelper.isFavoriteExists("mail", song.getId())) {
-                databaseHelper.removeFavorite("mail", song.getId());
+            if (db.isFavoriteExists("mail", song.getId())) {
+                db.removeFavorite("mail", song.getId());
                 ibFavorite.setImageResource(FAVORITE_ICON);
             } else {
-                databaseHelper.addFavorite("mail", song.getId());
+                db.addFavorite("mail", song.getId());
                 ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
             }
         });
@@ -431,7 +434,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void updateFavoriteButton() {
-        if (databaseHelper.isFavoriteExists("userId", song.getId())) {
+        if (db.isFavoriteExists("userId", song.getId())) {
             ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
         } else {
             ibFavorite.setImageResource(FAVORITE_ICON);

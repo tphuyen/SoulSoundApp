@@ -134,9 +134,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CREATE_FAVORITE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_FAVORITE + " ( " +
                 KEY_FAVORITE_USER_EMAIL + " TEXT NOT NULL, " +
                 KEY_FAVORITE_SONG_ID + " TEXT NOT NULL, " +
-                "FOREIGN KEY(" + KEY_FAVORITE_USER_EMAIL + ") REFERENCES " + TABLE_USER + "(" + KEY_USER_EMAIL + ")," +
                 "FOREIGN KEY(" + KEY_FAVORITE_SONG_ID + ") REFERENCES " + TABLE_SONG + "(" + KEY_SONG_ID + ")," +
-                "PRIMARY KEY (" + KEY_FAVORITE_USER_EMAIL + ", " + KEY_FAVORITE_SONG_ID + ")" +
+                "PRIMARY KEY (" + KEY_FAVORITE_USER_EMAIL + ", " + KEY_FAVORITE_SONG_ID + ")" + ")";
 
         // Create categories table if not exists
         String CREATE_CATEGORIES_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY + " ( " +
@@ -524,11 +523,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    public List<String> getFavoriteSongs(String userId) {
+    public List<String> getFavoriteSongs() {
         List<String> songs = new ArrayList<>();
-
         String FAVORITE_SELECT_QUERY =
-                String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_FAVORITE, KEY_FAVORITE_USER_EMAIL, userId);
+                String.format("SELECT * FROM %s", TABLE_FAVORITE);
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(FAVORITE_SELECT_QUERY, null);

@@ -144,4 +144,10 @@ public class DataManager {
             }
         });
     }
+
+    public void setFavorites(String email, List<String> favorites) {
+        for (String songId : favorites) {
+            db.addFavorite(email, songId);
+        }
+    }
 }
