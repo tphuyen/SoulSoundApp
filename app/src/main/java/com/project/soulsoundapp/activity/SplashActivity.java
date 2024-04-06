@@ -37,9 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                 if(isNameExist && isEmaiExist) {
                     intent = new Intent(SplashActivity.this, MainActivity2.class);
                 } else {
-                    intent = new Intent(SplashActivity.this, MainActivity2.class);
-//                    intent = new Intent(SplashActivity.this, SignInActivity.class);
-
+                    intent = new Intent(SplashActivity.this, SignInActivity.class);
                 }
                 startActivity(intent);
                 finish();
