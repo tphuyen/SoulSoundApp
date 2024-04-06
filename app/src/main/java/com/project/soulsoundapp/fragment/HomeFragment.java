@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 //import com.project.soulsoundapp.adapter.ImageSliderAdapter;
 public class HomeFragment extends Fragment {
-    private RecyclerView rvDiscover, rvHitSong;
+    private RecyclerView rvDiscover, rvHitSong, rvTop100;
     private ViewPager2 viewPager2;
     private Handler slideHandler = new Handler();
     private DatabaseHelper db;
@@ -127,6 +127,14 @@ public class HomeFragment extends Fragment {
 
         rvHitSong.setLayoutManager(gridLayoutManager);
         rvHitSong.setAdapter(songAdapter);
+//
+        rvTop100 = view.findViewById(R.id.rvTop100);
+        PlaylistHorizontalAdpater playlistHorizontalAdpaterTop100 = new PlaylistHorizontalAdpater(getContext());
+        playlistHorizontalAdpaterTop100.setPlaylists(getPlaylists());
+        LinearLayoutManager managerTop100 = new LinearLayoutManager(getContext());
+        managerTop100.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvTop100.setLayoutManager(managerTop100);
+        rvTop100.setAdapter(playlistHorizontalAdpaterTop100);
     }
 
     private List<Song> getSong() {

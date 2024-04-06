@@ -1,6 +1,8 @@
 package com.project.soulsoundapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.activity.PlaylistActivity;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Playlist;
 import com.squareup.picasso.Picasso;
@@ -45,6 +48,17 @@ public class PlaylistHorizontalAdpater extends RecyclerView.Adapter<PlaylistHori
         Picasso.get().load(playlist.getPlaylistThumbnail()).into(holder.ivImgPlaylist);
         holder.tvNamePlaylist.setText(playlist.getPlaylistTitle());
         holder.tvArtistPlaylist.setText(playlist.getPlaylistDescription());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PlaylistActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("playlist", playlist);
+                intent.putExtras(bundle);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.activity.CategoryActivity;
 import com.project.soulsoundapp.activity.PlaylistActivity;
 import com.project.soulsoundapp.model.Category;
 import com.squareup.picasso.Picasso;
@@ -26,6 +27,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public CategoryAdapter(Context context) {
         this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
     }
     public void setData(List<Category> categories) {
         this.categories = categories;
@@ -49,13 +54,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.tvCategoryName.setText(category.getCategoryTitle());
         holder.clItemCategory.setBackgroundColor(Color.parseColor(category.getCategoryBackColor()));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.clItemCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PlaylistActivity.class);
+                Intent intent = new Intent(context, CategoryActivity.class);
                 Bundle bundle = new Bundle();
-                intent.putExtra("title", category.getCategoryTitle());
-                intent.putExtra("image", category.getCategoryThumbnail());
+                bundle.putSerializable("category", category);
                 context.startActivity(intent);
             }
         });
