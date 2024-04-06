@@ -18,11 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.helper.DatabaseHelper;
 
 import java.util.Random;
 
 public class VerifyCodeActivity extends AppCompatActivity {
     private static final String TAG = "VerifyCodeActivity";
+    TextView tvEmailReset;
 
     private final TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -58,6 +60,7 @@ public class VerifyCodeActivity extends AppCompatActivity {
     private int resendTime = 60;
     private int selectedETPosition = 0;
     private int code;
+    DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +86,13 @@ public class VerifyCodeActivity extends AppCompatActivity {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email = tvEmailReset.getText().toString();
                 final String generateOtp = otpET1.getText().toString()+otpET2.getText().toString()+otpET3.getText().toString()+otpET4.getText().toString();
                 if(generateOtp.length()==4){
                     String codeAsString = Integer.toString(code);
                     if(generateOtp.equals(codeAsString)) {
                         Intent intent = new Intent(VerifyCodeActivity.this, ResetPasswordActivity.class);
+                        intent.putExtra("email",email);
                         startActivity(intent);
                     } else {
                         Log.v(TAG, "wrong");
@@ -104,6 +109,11 @@ public class VerifyCodeActivity extends AppCompatActivity {
         otpET4 = findViewById(R.id.otpET4);
         tvResendCode = findViewById(R.id.tvResendCode);
         btnVerify = findViewById(R.id.btnVerify);
+        databaseHelper = new DatabaseHelper(this);
+        tvEmailReset = findViewById(R.id.tvEmailReset);
+
+        Intent intent = getIntent();
+        tvEmailReset.setText(intent.getStringExtra("email"));
 
         otpET1.addTextChangedListener(textWatcher);
         otpET2.addTextChangedListener(textWatcher);

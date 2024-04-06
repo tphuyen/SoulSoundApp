@@ -20,7 +20,6 @@ public class ForgetPassword extends AppCompatActivity {
     TextView tvForgotPw, tvEmailReset, tvBackSignIn;
     EditText etEmailReset;
     Button btnReset;
-    int code;
     DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

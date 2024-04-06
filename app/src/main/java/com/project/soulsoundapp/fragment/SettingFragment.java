@@ -125,48 +125,44 @@ public class SettingFragment extends Fragment {
         switchMode = view.findViewById(R.id.switchMode);
         sharedPreferences = getContext().getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightMode = sharedPreferences.getBoolean("nightMode", false);
-        if(nightMode){
-            switchMode.setChecked(true);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+        switchMode.setChecked(nightMode);
+
         switchMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nightMode){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("nightMode", false);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("nightMode", true);
-                }
+                nightMode = !nightMode;
+                switchMode.setChecked(nightMode);
+
+                AppCompatDelegate.setDefaultNightMode(nightMode ? AppCompatDelegate.MODE_NIGHT_YES
+                        : AppCompatDelegate.MODE_NIGHT_NO);
+
+                editor = sharedPreferences.edit();
+                editor.putBoolean("nightMode", nightMode);
                 editor.apply();
-                getActivity().recreate();
             }
         });
-        switchModeLanguage=view.findViewById(R.id.switchModeLanguage);
-        sharedPreferences = getContext().getSharedPreferences("MODE", Context.MODE_PRIVATE);
-        eLanguage = sharedPreferences.getBoolean("eLanguage", false);
-        String currentLanguage = getCurrentLanguage();
-
-        // Kiểm tra nếu ngôn ngữ hiện tại là "en" thì đặt SwitchCompat là OFF (tiếng Anh), ngược lại đặt là ON (tiếng Việt)
-        switchModeLanguage.setChecked(currentLanguage.equals("en"));
-
-        // Thiết lập sự kiện click cho SwitchCompat để thay đổi ngôn ngữ
-        switchModeLanguage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Nếu SwitchCompat được check, đặt ngôn ngữ là "en", ngược lại đặt là "vi"
-                String languageCode = switchModeLanguage.isChecked() ? "en" : "vi";
-
-                // Gọi phương thức setLocale() để thiết lập ngôn ngữ mới
-                setLocale(languageCode);
-
-                // Tái tạo activity để cập nhật ngôn ngữ
-                getActivity().recreate();
-            }
-        });
+//        switchModeLanguage=view.findViewById(R.id.switchModeLanguage);
+//        sharedPreferences = getContext().getSharedPreferences("MODE", Context.MODE_PRIVATE);
+//        eLanguage = sharedPreferences.getBoolean("eLanguage", false);
+//        String currentLanguage = getCurrentLanguage();
+//
+//        // Kiểm tra nếu ngôn ngữ hiện tại là "en" thì đặt SwitchCompat là OFF (tiếng Anh), ngược lại đặt là ON (tiếng Việt)
+//        switchModeLanguage.setChecked(currentLanguage.equals("en"));
+//
+//        // Thiết lập sự kiện click cho SwitchCompat để thay đổi ngôn ngữ
+//        switchModeLanguage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Nếu SwitchCompat được check, đặt ngôn ngữ là "en", ngược lại đặt là "vi"
+//                String languageCode = switchModeLanguage.isChecked() ? "en" : "vi";
+//
+//                // Gọi phương thức setLocale() để thiết lập ngôn ngữ mới
+//                setLocale(languageCode);
+//
+//                // Tái tạo activity để cập nhật ngôn ngữ
+//                getActivity().recreate();
+//            }
+//        });
     }
     private void setLocale(String languageCode) {
         Locale locale = new Locale(languageCode);
