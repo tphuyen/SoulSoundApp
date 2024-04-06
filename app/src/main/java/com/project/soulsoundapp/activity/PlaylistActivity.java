@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,6 +37,7 @@ public class PlaylistActivity extends AppCompatActivity {
     private Playlist playlist;
     private DatabaseHelper db;
     private String mTitle;
+    private static final String TAG = "PlaylistActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +51,6 @@ public class PlaylistActivity extends AppCompatActivity {
     public void addControls() {
         db = DatabaseHelper.getInstance(getApplicationContext());
 
-        if((Playlist) getIntent().getSerializableExtra("playlist") != null) {
-            playlist = (Playlist) getIntent().getSerializableExtra("playlist");
-        }
-        if((String) getIntent().getStringExtra("mTitle") != null) {
-            mTitle = (String) (String) getIntent().getStringExtra("mTitle");
-        }
-
-        if(getIntent().getStringArrayListExtra("mFavorite") != null) {
-            List<String> favorites = getIntent().getStringArrayListExtra("mFavorite");
-            songs = db.getSongByIds(favorites);
-        } else {
-            songs = new ArrayList<>();
-        }
-
-        songs = new ArrayList<>();
-
         tvTitle = findViewById(R.id.tvTitle);
         ibReturn = findViewById(R.id.ibReturn);
         ivPlaylistImage = findViewById(R.id.ivPlaylistImage);
@@ -73,11 +59,15 @@ public class PlaylistActivity extends AppCompatActivity {
 //        Set layout RecyclerView
         LinearLayoutManager managerSongs = new LinearLayoutManager(this);
         rvSongsList.setLayoutManager(managerSongs);
-        if((Playlist) getIntent().getSerializableExtra("playlist") != null) {
-            getListSongs();
+        if(getIntent().getSerializableExtra("playlist") != null) {
+            playlist = (Playlist) getIntent().getSerializableExtra("playlist");
         } else {
-            setSongsList(songs);
-            updateIntentData();
+            mTitle = getIntent().getStringExtra("mTitle");
+        }
+        if((Playlist) getIntent().getSerializableExtra("playlist") != null) {
+            setPlaylist();
+        } else {
+            setFavorites();
         }
     }
 
@@ -89,30 +79,23 @@ public class PlaylistActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void updateIntentData() {
-        if(playlist != null) {
-            tvTitle.setText(playlist.getPlaylistTitle());
-            Picasso.get().load(playlist.getPlaylistCover()).into(ivPlaylistImage);
-        } else {
-            tvTitle.setText(mTitle);
-        }
-
-    }
-
     private void setSongsList(List<Song> songs) {
         SongAdapter songAdapter = new SongAdapter(this);
         songAdapter.setSongs(songs);
         rvSongsList.setAdapter(songAdapter);
     }
 
-    private void getListSongs() {
-        if (db != null) {
-            songs = db.getSongByIds(playlist.getPlaylistSongs());
-            setSongsList(songs);
-            updateIntentData();
-        } else {
-            Toast.makeText(getApplicationContext(), "Database is not initialized", Toast.LENGTH_SHORT).show();
-        }
+    private void setPlaylist() {
+        songs = db.getSongByIds(playlist.getPlaylistSongs());
+        tvTitle.setText(playlist.getPlaylistTitle());
+        Picasso.get().load(playlist.getPlaylistCover()).into(ivPlaylistImage);
+        setSongsList(songs);
+    }
+
+    private void setFavorites() {
+        tvTitle.setText(mTitle);
+        List<String> favorites = getIntent().getStringArrayListExtra("mFavorite");
+        songs = db.getSongByIds(favorites);
+        setSongsList(songs);
     }
 }

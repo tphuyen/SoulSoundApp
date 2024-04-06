@@ -150,4 +150,19 @@ public class DataManager {
             db.addFavorite(email, songId);
         }
     }
+
+    public void handleFavourite(String email, String songId, String action) {
+        ApiService.apiService.handleFavourite(email, songId, action)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable throwable) {
+
+                    }
+                });
+    }
 }
