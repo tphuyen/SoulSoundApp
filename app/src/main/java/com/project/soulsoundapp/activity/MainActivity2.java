@@ -15,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.fragment.HomeFragment;
 import com.project.soulsoundapp.fragment.LibraryFragment;
+import com.project.soulsoundapp.fragment.MiniPlayerFragment;
 import com.project.soulsoundapp.fragment.SearchFragment;
 import com.project.soulsoundapp.fragment.SettingFragment;
 
@@ -24,6 +25,7 @@ public class MainActivity2 extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     DrawerLayout drawerLayout;
     FrameLayout fragmentLayout;
+    FrameLayout flMiniPlayer;
 
 
     @Override
@@ -55,7 +57,20 @@ public class MainActivity2 extends AppCompatActivity {
             return true;
         });
 
+        addControls();
+        setMiniPlayer();
+    }
 
+    private void addControls() {
+        flMiniPlayer = findViewById(R.id.flMiniPlayer);
+    }
+
+    private void setMiniPlayer() {
+        flMiniPlayer.setVisibility(View.VISIBLE);
+
+        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment(this);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.flMiniPlayer, miniPlayerFragment).commit();
     }
 
     private void replaceFragment(Fragment fragment) {
