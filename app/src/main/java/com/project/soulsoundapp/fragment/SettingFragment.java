@@ -33,7 +33,7 @@ public class SettingFragment extends Fragment {
     private static final String TAG = "SettingFragment";
 
     private ImageView ivUserAvatar, ivSleepTimer;
-    private TextView tvViewProfile;
+    private TextView tvViewProfile, tvNameUser;
     private Button btnLogOut;
     SwitchCompat switchMode, switchModeLanguage;
     boolean nightMode, eLanguage;
@@ -64,12 +64,25 @@ public class SettingFragment extends Fragment {
         tvViewProfile = view.findViewById(R.id.tvViewProfile);
         btnLogOut = view.findViewById(R.id.btnLogOut);
         ivSleepTimer = view.findViewById(R.id.ivSleepTimer);
+        tvNameUser = view.findViewById(R.id.tvNameUser);
+
+        sharedPreferences = getContext().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        String fullname;
+        try {
+            fullname = sharedPreferences.getString(KEY_NAME, null);
+        } catch (Exception e) {
+            fullname = "Unknown";
+        }
+        tvNameUser.setText(fullname);
+    }
+
+    private void addEvents() {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Xóa thông tin user khỏi SharedPreferences
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(KEY_NAME);
                 editor.remove(KEY_EMAIL);
                 editor.apply();
@@ -86,9 +99,6 @@ public class SettingFragment extends Fragment {
                 startActivity(intent);
             }
         });
-    }
-
-    private void addEvents() {
         ivUserAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

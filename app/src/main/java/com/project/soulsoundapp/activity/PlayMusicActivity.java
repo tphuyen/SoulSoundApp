@@ -82,9 +82,9 @@ public class PlayMusicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_music);
         mListComments = new ArrayList<>();
-        mediaPlayerService = new MediaPlayerService();
+        mediaPlayerService = MediaPlayerService.getInstance(getApplicationContext());
         song = (Song) getIntent().getSerializableExtra("song");
-        mediaPlayerService.playSong(MediaPlayerService.getCurrentPlaylist().indexOf(song));
+        mediaPlayerService.playSong(mediaPlayerService.getCurrentPlaylist().indexOf(song));
         mProgressDialog = new ProgressDialog(this);
         addControls();
         addEvents();
@@ -231,6 +231,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = etComment.getText().toString().trim();
+
                 if(content.length() > 0) {
                     Comment comment = new Comment(song.getId(), "thangvb.dev@gmail.com", content);
                     sendCommentAPI(comment);

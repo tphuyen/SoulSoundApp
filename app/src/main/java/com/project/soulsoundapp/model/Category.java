@@ -1,37 +1,67 @@
 package com.project.soulsoundapp.model;
 
-public class Category {
-    private int image;
-    private String name;
-    private int bgColor;
+import com.google.gson.annotations.SerializedName;
 
-    public Category(int image, String name, int bgColor) {
-        this.image = image;
-        this.name = name;
-        this.bgColor = bgColor;
+import java.io.Serializable;
+import java.util.List;
+
+public class Category implements Serializable {
+    @SerializedName("category_id")
+    private String categoryId;
+    @SerializedName("category_title")
+    private String categoryTitle;
+    @SerializedName("category_thumbnail")
+    private String categoryThumbnail;
+    @SerializedName("category_backcolor")
+    private String categoryBackColor;
+    @SerializedName("category_playlists")
+    private List<String> categoryPlaylists;
+
+    public Category(String categoryId, String categoryTitle, String categoryThumbnail, String categoryBackColor, List<String> categoryPlaylists) {
+        this.categoryId = categoryId;
+        this.categoryTitle = categoryTitle;
+        this.categoryThumbnail = categoryThumbnail;
+        this.categoryBackColor = categoryBackColor;
+        this.categoryPlaylists = categoryPlaylists;
     }
 
-    public int getImage() {
-        return image;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getName() {
-        return name;
+    public String getCategoryTitle() {
+        return categoryTitle;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryTitle(String categoryTitle) {
+        this.categoryTitle = categoryTitle;
     }
 
-    public int getBgColor() {
-        return bgColor;
+    public String getCategoryThumbnail() {
+        return categoryThumbnail;
     }
 
-    public void setBgColor(int bgColor) {
-        this.bgColor = bgColor;
+    public void setCategoryThumbnail(String categoryThumbnail) {
+        this.categoryThumbnail = categoryThumbnail;
+    }
+
+    public String getCategoryBackColor() {
+        return categoryBackColor;
+    }
+
+    public void setCategoryBackColor(String categoryBackColor) {
+        this.categoryBackColor = categoryBackColor;
+    }
+
+    public List<String> getCategoryPlaylists() {
+        return categoryPlaylists;
+    }
+
+    public void setCategoryPlaylists(List<String> categoryPlaylists) {
+        this.categoryPlaylists = categoryPlaylists;
     }
 }

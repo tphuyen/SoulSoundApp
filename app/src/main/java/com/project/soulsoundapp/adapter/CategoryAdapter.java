@@ -2,6 +2,7 @@ package com.project.soulsoundapp.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.activity.PlaylistActivity;
 import com.project.soulsoundapp.model.Category;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +45,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if(category == null) {
             return;
         }
-        holder.ivCategoryImage.setImageResource(category.getImage());
-        holder.tvCategoryName.setText(category.getName());
-        holder.clItemCategory.setBackgroundColor(category.getBgColor());
+        Picasso.get().load(category.getCategoryThumbnail()).into(holder.ivCategoryImage);
+        holder.tvCategoryName.setText(category.getCategoryTitle());
+        holder.clItemCategory.setBackgroundColor(Color.parseColor(category.getCategoryBackColor()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PlaylistActivity.class);
                 Bundle bundle = new Bundle();
-                intent.putExtra("title", category.getName());
-                intent.putExtra("image", category.getImage());
+                intent.putExtra("title", category.getCategoryTitle());
+                intent.putExtra("image", category.getCategoryThumbnail());
                 context.startActivity(intent);
             }
         });

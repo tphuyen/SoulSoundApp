@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.project.soulsoundapp.model.Album;
+import com.project.soulsoundapp.model.Category;
 import com.project.soulsoundapp.model.Comment;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Song;
@@ -22,9 +23,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     class ApiResponse<T> {
@@ -64,9 +68,11 @@ public interface ApiService {
 //    Routes
     @GET("users")
     Call<ApiResponse<List<User>>> getAllUsers();
-
+    @FormUrlEncoded
     @POST("users/login")
-    Call<ApiResponse<String>> loginApi(@Body String username, @Body String password);
+    Call<ApiResponse<User>> loginApi(@Field("email") String email, @Field("password") String password);
+//    Call<ApiResponse<User>> loginApi(@Query("email") String email, @Query("password") String password);
+
 
     @POST("users/register")
     Call<ApiResponse<User>> registerApi(@Body User user, @Body String password);
@@ -84,7 +90,7 @@ public interface ApiService {
     @GET("playlists")
     Call<ApiResponse<List<Playlist>>> getAllPlaylists();
 
-    @GET("albums")
-    Call<ApiResponse<List<Album>>> getAllAlbums();
+    @GET("categories")
+    Call<ApiResponse<List<Category>>> getAllCategories();
 
 }

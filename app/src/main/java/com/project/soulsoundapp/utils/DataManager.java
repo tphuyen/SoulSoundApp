@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.model.Category;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Song;
 import com.project.soulsoundapp.model.User;
@@ -25,11 +26,13 @@ public class DataManager {
     private static List<User> mListUsers;
     private static List<Song> mListSongs;
     private static List<Playlist> mListPlaylists;
+    private static List<Category> mListCategories;
     private DataManager(Context context) {
         db = DatabaseHelper.getInstance(context);
         mListUsers = new ArrayList<>();
         mListSongs = new ArrayList<>();
         mListPlaylists = new ArrayList<>();
+        mListCategories = new ArrayList<>();
     }
 
     public static DataManager getInstance(Context context) {
@@ -43,6 +46,7 @@ public class DataManager {
         setUsersDB();
         setSongsDB();
         setPlaylistsDB();
+        setCategoriesDB();
     }
     private void setUsersDB() {
         ApiService.apiService.getAllUsers().enqueue(new Callback<ApiService.ApiResponse<List<User>>>() {
@@ -113,6 +117,30 @@ public class DataManager {
             @Override
             public void onFailure(Call<ApiService.ApiResponse<List<Playlist>>> call, Throwable throwable) {
                 Log.e(TAG, "[Playlist] Called API & Insert DB failed : " + throwable.getMessage());
+            }
+        });
+    }
+
+    private void setCategoriesDB() {
+        ApiService.apiService.getAllCategories().enqueue(new Callback<ApiService.ApiResponse<List<Category>>>() {
+            @Override
+            public void onResponse(Call<ApiService.ApiResponse<List<Category>>> call, Response<ApiService.ApiResponse<List<Category>>> response) {
+                if(response.isSuccessful()) {
+                    assert response.body() != null;
+                    mListCategories = response.body().getData();
+
+                    if(mListCategories.size() > 0) {
+                        for (Category category : mListCategories) {
+                            db.addCategory(category);
+                        }
+                    }
+                    Log.d(TAG, "[Category] Called API & Insert DB successfully");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiService.ApiResponse<List<Category>>> call, Throwable throwable) {
+                Log.e(TAG, "[Category] Called API & Insert DB failed : " + throwable.getMessage());
             }
         });
     }

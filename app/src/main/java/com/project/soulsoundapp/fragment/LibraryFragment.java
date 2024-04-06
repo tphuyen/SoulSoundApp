@@ -89,18 +89,18 @@ public class LibraryFragment extends Fragment {
 
     public void getFavoriteSong() {
         String email = "thangvb@gmail.com";
-        ApiService.apiService.getFavoriteApi(email)
-                .enqueue(new Callback<ApiService.ApiResponse<Playlist>>() {
-                    @Override
-                    public void onResponse(Call<ApiService.ApiResponse<Playlist>> call, Response<ApiService.ApiResponse<Playlist>> response) {
-                        mFavorite = response.body().getData();
-                        Log.v(TAG, "" + mFavorite);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiService.ApiResponse<Playlist>> call, Throwable throwable) {
-                        Log.v(TAG, "Call failure: " + throwable.getMessage());
-                    }
-                });
+//        ApiService.apiService.getFavoriteApi(email)
+//                .enqueue(new Callback<ApiService.ApiResponse<Playlist>>() {
+//                    @Override
+//                    public void onResponse(Call<ApiService.ApiResponse<Playlist>> call, Response<ApiService.ApiResponse<Playlist>> response) {
+//                        mFavorite = response.body().getData();
+//                        Log.v(TAG, "" + mFavorite);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ApiService.ApiResponse<Playlist>> call, Throwable throwable) {
+//                        Log.v(TAG, "Call failure: " + throwable.getMessage());
+//                    }
+//                });
     }
 }
