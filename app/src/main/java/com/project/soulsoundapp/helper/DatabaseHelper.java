@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.gson.annotations.SerializedName;
+import com.project.soulsoundapp.model.Category;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.User;
 import com.project.soulsoundapp.model.Song;
@@ -27,6 +29,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_SONG = "Songs";
     private static final String TABLE_PLAYLIST = "Playlists";
     private static final String TABLE_PS = "Playlist_Song";
+    private static final String TABLE_FAVORITE = "Favorites";
+    private static final String TABLE_CATEGORY = "Categories";
+    private static final String TABLE_CP = "Category_Playlist";
 
 //    USER KEY
     private static final String KEY_USER_EMAIL = "email";
@@ -55,6 +60,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    PLAYLIST_SONG KEY
     private static final String KEY_PS_PLAYLIST_ID = "playlistId";
     private static final String KEY_PS_SONG_ID = "songId";
+
+//    FAVORITE KEY
+    private static final String KEY_FAVORITE_USER_EMAIL = "email";
+    private static final String KEY_FAVORITE_SONG_ID = "songId";
+
+//    CATEGORY KEY
+    private static final String KEY_CATEGORY_ID = "categoryId";
+    private static final String KEY_CATEGORY_TITLE = "categoryTitle";
+    private static final String KEY_CATEGORY_THUMBNAIL = "categoryThumbnail";
+    private static final String KEY_CATEGORY_BACKCOLOR = "categoryBackColor";
+
+//    CATEGORY_PLAYLIST KEY
+    private static final String KEY_CP_CATEGORY_ID = "categoryId";
+    private static final String KEY_CP_PLAYLIST_ID = "playlistId";
 
     public static synchronized DatabaseHelper getInstance(Context context) {
 
@@ -111,11 +130,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "PRIMARY KEY (" + KEY_PS_PLAYLIST_ID + ", " + KEY_PS_SONG_ID + ")" +
                 ")";
 
+        // Create favorite table if not exists
+        String CREATE_FAVORITE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_FAVORITE + " ( " +
+                KEY_FAVORITE_USER_EMAIL + " TEXT NOT NULL, " +
+                KEY_FAVORITE_SONG_ID + " TEXT NOT NULL, " +
+                "FOREIGN KEY(" + KEY_FAVORITE_USER_EMAIL + ") REFERENCES " + TABLE_USER + "(" + KEY_USER_EMAIL + ")," +
+                "FOREIGN KEY(" + KEY_FAVORITE_SONG_ID + ") REFERENCES " + TABLE_SONG + "(" + KEY_SONG_ID + ")," +
+                "PRIMARY KEY (" + KEY_FAVORITE_USER_EMAIL + ", " + KEY_FAVORITE_SONG_ID + ")" +
+
+        // Create categories table if not exists
+        String CREATE_CATEGORIES_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CATEGORY + " ( " +
+                KEY_CATEGORY_ID + " TEXT PRIMARY KEY, " +
+                KEY_CATEGORY_TITLE + " TEXT NOT NULL, " +
+                KEY_CATEGORY_THUMBNAIL + " TEXT NOT NULL, " +
+                KEY_CATEGORY_BACKCOLOR + " TEXT NOT NULL" +
+                ")";
+
+        String CREATE_CATEGORY_PLAYLIST_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CP + " ( " +
+                KEY_CP_CATEGORY_ID + " TEXT NOT NULL, " +
+                KEY_CP_PLAYLIST_ID + " TEXT NOT NULL, " +
+                "FOREIGN KEY(" + KEY_CP_CATEGORY_ID + ") REFERENCES " + TABLE_CATEGORY + "(" + KEY_CATEGORY_ID + ")," +
+                "FOREIGN KEY(" + KEY_CP_PLAYLIST_ID + ") REFERENCES " + TABLE_PLAYLIST + "(" + KEY_PLAYLIST_ID + ")," +
+                "PRIMARY KEY (" + KEY_CP_CATEGORY_ID + ", " + KEY_CP_PLAYLIST_ID + ")" +
+                ")";
+
         // Execute SQL statements
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_SONGS_TABLE);
         db.execSQL(CREATE_PLAYLISTS_TABLE);
         db.execSQL(CREATE_PLAYLIST_SONG_TABLE);
+        db.execSQL(CREATE_FAVORITE_TABLE);
+        db.execSQL(CREATE_CATEGORIES_TABLE);
+        db.execSQL(CREATE_CATEGORY_PLAYLIST_TABLE);
 
         Log.v(TAG, "Create tables successfully");
     }
@@ -129,6 +175,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_PLAYLIST);
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONG);
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITE);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_CP);
 
                 onCreate(db);
 
@@ -176,11 +225,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         User u;
         Log.v(TAG, "Start check");
 
+        List<String> favorites = new ArrayList<>();
+
         if(cursor.moveToFirst()) {
             do {
                 u = new User(
                         cursor.getString(cursor.getColumnIndex("email")),
-                        cursor.getString(cursor.getColumnIndex("name"))
+                        cursor.getString(cursor.getColumnIndex("name")),
+                        favorites
                 );
             } while (cursor.moveToNext());
             Log.v(TAG, "End check true");
@@ -441,6 +493,75 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 //    END HANDLE PLAYLIST
 
+//    BEGIN HANDLE FAVORITE PLAYLIST
+    public void addFavorite(String email, String songId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_FAVORITE_USER_EMAIL, email);
+            values.put(KEY_FAVORITE_SONG_ID, songId);
+
+            if (!isFavoriteExists(email, songId)) {
+                db.insert(TABLE_FAVORITE, null, values);
+            }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to add favorite to database: " + e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public boolean isFavoriteExists(String mail, String songId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT 1 FROM " + TABLE_FAVORITE + " WHERE " + KEY_FAVORITE_USER_EMAIL + " LIKE ? AND " + KEY_FAVORITE_SONG_ID + " LIKE ?";
+        Cursor cursor = db.rawQuery(query, new String[]{mail, songId});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public List<String> getFavoriteSongs(String userId) {
+        List<String> songs = new ArrayList<>();
+
+        String FAVORITE_SELECT_QUERY =
+                String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_FAVORITE, KEY_FAVORITE_USER_EMAIL, userId);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(FAVORITE_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    String song = cursor.getString(cursor.getColumnIndex(KEY_FAVORITE_SONG_ID));
+                    songs.add(song);
+                } while(cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get favorite from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return songs;
+    }
+
+    public void removeFavorite(String mail, String songId) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        try {
+            db.delete(TABLE_FAVORITE, KEY_FAVORITE_USER_EMAIL + " = ? AND " + KEY_FAVORITE_SONG_ID + " = ?", new String[]{mail, songId});
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to remove favorite from database: " + e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+    }
+//    END HANDLE FAVORITE PLAYLIST
 
 //    BEGIN HANDLE PLAYLIST_SONG
     public List<String> getSongsOfPlaylist(String playlistId) {
@@ -500,6 +621,143 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 //    END HANDLE PLAYLIST_SONG
 
+
+//    BEGIN HANDLE CATEGORY
+    public void addCategory(Category category) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues valuesOfPlaylist = new ContentValues();
+            valuesOfPlaylist.put(KEY_CATEGORY_ID, category.getCategoryId());
+            valuesOfPlaylist.put(KEY_CATEGORY_TITLE, category.getCategoryTitle());
+            valuesOfPlaylist.put(KEY_CATEGORY_THUMBNAIL, category.getCategoryThumbnail());
+            valuesOfPlaylist.put(KEY_CATEGORY_BACKCOLOR, category.getCategoryBackColor());
+
+
+            // Check if playlistId already exists
+            if (!isCategoryExists(category.getCategoryId())) {
+                db.insert(TABLE_CATEGORY, null, valuesOfPlaylist);
+    //                Log.d(TAG, "Add playlist successfully ::" + playlist.getPlaylistId());
+            } else {
+    //                Log.d(TAG, "Playlist already exists, skipping insertion ::" + playlist.getPlaylistId());
+            }
+
+            for (String playlistId : category.getCategoryPlaylists()) {
+                if(isSongAvailable(playlistId)) {
+                    addCategoryPlaylist(category.getCategoryId(), playlistId);
+                }
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to add playlist to database" + e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public boolean isCategoryExists(String categoryId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT 1 FROM " + TABLE_CATEGORY + " WHERE " + KEY_CATEGORY_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{categoryId});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        String CATEGORIES_SELECT_QUERY =
+                String.format("SELECT * FROM %s", TABLE_CATEGORY);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(CATEGORIES_SELECT_QUERY, null);
+
+        try {
+            if (cursor.moveToFirst()) {
+
+                do {
+                    Category category = new Category(
+                            cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_ID)),
+                            cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_TITLE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_THUMBNAIL)),
+                            cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_BACKCOLOR)),
+                            getPlaylistsOfCategory(cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_ID)))
+                    );
+
+                    categories.add(category);
+                } while(cursor.moveToNext());
+            }
+            Log.d(TAG, "[Category DB] Create categories successfully");
+
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get category from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return categories;
+    }
+
+//    END HANDLE CATEGORY
+
+//    BEGIN HANDLE CATEGORY_PLAYLIST
+    public List<String> getPlaylistsOfCategory(String categoryId) {
+        List<String> playlists = new ArrayList<>();
+
+        String CP_PLAYLISTS_SELECT_QUERY =
+                String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_CP, KEY_CP_CATEGORY_ID, categoryId);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(CP_PLAYLISTS_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    String playlist = cursor.getString(cursor.getColumnIndex(KEY_CP_PLAYLIST_ID));
+                    playlists.add(playlist);
+                } while(cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get playlist from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+        return playlists;
+    }
+
+    public boolean isCategoryPlaylistExists(String categoryId, String playlistId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT 1 FROM " + TABLE_CP + " WHERE " + KEY_CP_CATEGORY_ID + " = ? AND " + KEY_CP_PLAYLIST_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{categoryId, playlistId});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public void addCategoryPlaylist(String categoryId, String playlistId) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_CP_CATEGORY_ID, categoryId);
+            values.put(KEY_CP_PLAYLIST_ID, playlistId);
+
+            if (!isCategoryPlaylistExists(categoryId, playlistId)) {
+                db.insert(TABLE_CP, null, values);
+            }
+
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to add playlist-song pair to database: " + e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+    }
+//    END HANDLE CATEGORY_PLAYLIST
 
 //    BEGIN HANDLE USER
     public void addUser(User user) {

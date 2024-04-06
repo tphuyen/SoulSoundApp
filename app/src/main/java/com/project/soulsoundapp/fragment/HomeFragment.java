@@ -22,16 +22,14 @@ import android.view.ViewGroup;
 //import com.denzcoskun.imageslider.models.SlideModel;
 import com.project.soulsoundapp.Domian.SliderItems;
 import com.project.soulsoundapp.R;
-import com.project.soulsoundapp.adapter.AlbumAdpater;
-import com.project.soulsoundapp.adapter.HitSongAdapter;
+import com.project.soulsoundapp.adapter.PlaylistHorizontalAdpater;
 import com.project.soulsoundapp.adapter.SliderAdapter;
 import com.project.soulsoundapp.adapter.SongAdapter;
 import com.project.soulsoundapp.helper.DatabaseHelper;
-import com.project.soulsoundapp.model.Album;
+import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Song;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 //import com.project.soulsoundapp.adapter.ImageSliderAdapter;
 public class HomeFragment extends Fragment {
@@ -50,7 +48,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         addControl(view);
-
         initView(view);
         banner();
     }
@@ -115,12 +112,12 @@ public class HomeFragment extends Fragment {
         db = DatabaseHelper.getInstance(view.getContext());
 
         rvDiscover = view.findViewById(R.id.rvDiscover);
-        AlbumAdpater albumAdpater = new AlbumAdpater(getContext());
-        albumAdpater.setAlbums(laydulieu());
+        PlaylistHorizontalAdpater playlistHorizontalAdpater = new PlaylistHorizontalAdpater(getContext());
+        playlistHorizontalAdpater.setPlaylists(getPlaylists());
         LinearLayoutManager managerDiscover = new LinearLayoutManager(getContext());
         managerDiscover.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvDiscover.setLayoutManager(managerDiscover);
-        rvDiscover.setAdapter(albumAdpater);
+        rvDiscover.setAdapter(playlistHorizontalAdpater);
 
         rvHitSong = view.findViewById(R.id.rvHitSong);
         SongAdapter songAdapter = new SongAdapter(getContext());
@@ -138,22 +135,8 @@ public class HomeFragment extends Fragment {
         return songs;
     }
 
-    private List<Album> laydulieu() {
-        List<Album> albums = new ArrayList<>();
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        albums.add(new Album("A001", "ABC", new Date(2020, 12, 30), "Gi Gi Do", R.drawable.img_kpop));
-        return albums;
+    private List<Playlist> getPlaylists() {
+        return db.getAllPlaylists();
     }
 
 }

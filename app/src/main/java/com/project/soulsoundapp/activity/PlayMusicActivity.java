@@ -82,9 +82,9 @@ public class PlayMusicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_music);
         mListComments = new ArrayList<>();
-        mediaPlayerService = new MediaPlayerService();
+        mediaPlayerService = MediaPlayerService.getInstance(getApplicationContext());
         song = (Song) getIntent().getSerializableExtra("song");
-        mediaPlayerService.playSong(MediaPlayerService.getCurrentPlaylist().indexOf(song));
+        mediaPlayerService.playSong(mediaPlayerService.getCurrentPlaylist().indexOf(song));
         mProgressDialog = new ProgressDialog(this);
         addControls();
         addEvents();
@@ -231,6 +231,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String content = etComment.getText().toString().trim();
+
                 if(content.length() > 0) {
                     Comment comment = new Comment(song.getId(), "thangvb.dev@gmail.com", content);
                     sendCommentAPI(comment);
@@ -336,12 +337,13 @@ public class PlayMusicActivity extends AppCompatActivity {
     private void setupFavoriteBtn() {
         ibFavorite = findViewById(R.id.ibFavorite);
         ibFavorite.setOnClickListener(v -> {
-            if (!isFavorite) {
-                ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
-            } else {
+            if (databaseHelper.isFavoriteExists("mail", song.getId())) {
+                databaseHelper.removeFavorite("mail", song.getId());
                 ibFavorite.setImageResource(FAVORITE_ICON);
+            } else {
+                databaseHelper.addFavorite("mail", song.getId());
+                ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
             }
-            isFavorite = !isFavorite;
         });
     }
 
@@ -426,5 +428,13 @@ public class PlayMusicActivity extends AppCompatActivity {
         int minutes = time / 60000;
         int seconds = (time % 60000) / 1000;
         return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    private void updateFavoriteButton() {
+        if (databaseHelper.isFavoriteExists("userId", song.getId())) {
+            ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
+        } else {
+            ibFavorite.setImageResource(FAVORITE_ICON);
+        }
     }
 }
