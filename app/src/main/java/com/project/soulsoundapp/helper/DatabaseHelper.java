@@ -36,7 +36,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    USER KEY
     private static final String KEY_USER_EMAIL = "email";
     private static final String KEY_USER_NAME = "name";
-    private static final String KEY_USER_PASSWORD = "password";
 
 //    SONG KEY
     private static final String KEY_SONG_ID = "id";
@@ -94,8 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Create users table if not exists
         String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + " ( " +
                 KEY_USER_EMAIL + " TEXT PRIMARY KEY, " +
-                KEY_USER_NAME + " TEXT NOT NULL, " +
-                KEY_USER_PASSWORD + " TEXT NOT NULL" +
+                KEY_USER_NAME + " TEXT NOT NULL " +
                 ")";
 
         // Create songs table if not exists
@@ -212,7 +210,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Boolean checkMail(String mail){
         SQLiteDatabase myDB = this.getWritableDatabase();
-        Cursor cursor = myDB.rawQuery("SELECT * FROM users where email = ?", new String[]{mail});
+        Cursor cursor = myDB.rawQuery("SELECT * FROM "+ TABLE_USER +" where " + KEY_USER_EMAIL + " = ?", new String[]{mail});
         if(cursor.getCount()>0)
             return true;
         else return false;
@@ -767,7 +765,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(KEY_USER_EMAIL, user.getEmail());
             values.put(KEY_USER_NAME, user.getFullName());
-            values.put(KEY_USER_PASSWORD, "User@123");
             db.insert(TABLE_USER, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {

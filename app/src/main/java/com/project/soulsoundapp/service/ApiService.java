@@ -67,6 +67,12 @@ public interface ApiService {
     @POST("users/register")
     Call<ApiResponse<User>> registerApi(@Body User user, @Body String password);
     @FormUrlEncoded
+    @POST("users/fwps")
+    Call<ApiResponse<User>> forgotPassword(@Field("email") String email, @Field("code") String code);
+    @FormUrlEncoded
+    @POST("users/updatepw")
+    Call<Void> updatePassword(@Field("email") String email, @Field("password") String password);
+    @FormUrlEncoded
     @POST("users/update")
     Call<Void> handleFavourite(@Field("email") String email, @Field("songId") String songId, @Field("action") String action);
 
