@@ -3,11 +3,13 @@ package com.project.soulsoundapp.fragment;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.activity.PlaylistActivity;
 import com.project.soulsoundapp.adapter.CategoryAdapter;
 import com.project.soulsoundapp.adapter.SongAdapter;
 import com.project.soulsoundapp.helper.DatabaseHelper;
@@ -31,19 +34,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
-
     private ImageView ivCloseIcon;
     private RecyclerView rvCategories, rvResultsForSearch;
     private EditText etSearch;
 
-    private CategoryAdapter categoryAdapter;
+//    private CategoryAdapter categoryAdapter;
     private SongAdapter songAdapter;
 
     private DatabaseHelper db;
     private static final String TAG = "SearchFragment";
 
     public SearchFragment() {
-        categoryAdapter = new CategoryAdapter(getContext());
+//        categoryAdapter = new CategoryAdapter(getContext());
         songAdapter = new SongAdapter(getContext());
         db = DatabaseHelper.getInstance(getContext());
     }
@@ -88,6 +90,7 @@ public class SearchFragment extends Fragment {
                 etSearch.clearFocus();
             }
         });
+
     }
 
     public void addControls(View view) {
@@ -97,6 +100,11 @@ public class SearchFragment extends Fragment {
         ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
 
         List<Category> categories = db.getAllCategories();
+
+        for (Category c : categories) {
+            Log.v(TAG, "Num of Cate :: " + c.getCategoryPlaylists().size());
+        }
+
         Log.v(TAG, "" + categories.size());
         setCategories(categories);
     }
@@ -108,6 +116,7 @@ public class SearchFragment extends Fragment {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         layoutManager.setOrientation(GridLayoutManager.VERTICAL);
 
+        CategoryAdapter categoryAdapter = new CategoryAdapter(getContext());
         rvCategories.setLayoutManager(layoutManager);
         categoryAdapter.setData(categories);
 

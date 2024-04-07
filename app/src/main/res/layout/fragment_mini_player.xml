@@ -10,7 +10,7 @@
         android:id="@+id/mini_player_background"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/bg_dark"
+        android:background="#7001B8AD"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

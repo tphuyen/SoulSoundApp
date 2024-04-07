@@ -20,12 +20,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-
-public class PlaylistHorizontalAdpater extends RecyclerView.Adapter<PlaylistHorizontalAdpater.PlaylistViewHolder> {
+public class PlaylistCategoryAdapter extends RecyclerView.Adapter<PlaylistCategoryAdapter.PlaylistViewHolder>{
     private List<Playlist> mPlaylists;
     private Context context;
 
-    public PlaylistHorizontalAdpater(Context context) {
+    public PlaylistCategoryAdapter(Context context) {
         this.context = context;
     }
 
@@ -36,13 +35,13 @@ public class PlaylistHorizontalAdpater extends RecyclerView.Adapter<PlaylistHori
 
     @NonNull
     @Override
-    public PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist_horizontal, parent, false);
-        return new PlaylistViewHolder(view);
+    public PlaylistCategoryAdapter.PlaylistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist_category, parent, false);
+        return new PlaylistCategoryAdapter.PlaylistViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaylistViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlaylistCategoryAdapter.PlaylistViewHolder holder, int position) {
         Playlist playlist = mPlaylists.get(position);
         if(playlist == null) return;
         Picasso.get().load(playlist.getPlaylistThumbnail()).into(holder.ivImgPlaylist);
@@ -60,7 +59,6 @@ public class PlaylistHorizontalAdpater extends RecyclerView.Adapter<PlaylistHori
             }
         });
     }
-
     @Override
     public int getItemCount() {
         return mPlaylists.size();
@@ -76,4 +74,6 @@ public class PlaylistHorizontalAdpater extends RecyclerView.Adapter<PlaylistHori
             tvArtistPlaylist = itemView.findViewById(R.id.tvArtistPlaylist);
         }
     }
+
+
 }
