@@ -106,25 +106,48 @@ public class SignInActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void login(String username, String password) {
-        User user;
-        ApiService.apiService.loginApi(username, password)
-                .enqueue(new Callback<ApiService.ApiResponse<User>>() {
-                    @Override
-                    public void onResponse(Call<ApiService.ApiResponse<User>> call, Response<ApiService.ApiResponse<User>> response) {
-                        if(response.isSuccessful()) {
-                            assert response.body() != null;
-                            User user = response.body().getData();
-                            setUser(user);
-                        }
-                        Toast.makeText(SignInActivity.this, "Here" + response.toString(), Toast.LENGTH_SHORT).show();
-                    }
+    private void login(String email, String password) {
 
-                    @Override
-                    public void onFailure(Call<ApiService.ApiResponse<User>> call, Throwable throwable) {
-                        Toast.makeText(SignInActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        ApiService.apiService.checkEmail(email)
+                        .enqueue(new Callback<ApiService.ApiResponse<Boolean>>() {
+                            @Override
+                            public void onResponse(Call<ApiService.ApiResponse<Boolean>> call, Response<ApiService.ApiResponse<Boolean>> response) {
+                                if(response.isSuccessful()) {
+                                    Boolean isExist = response.body().getData();
+                                    if(isExist) {
+                                        ApiService.apiService.loginApi(email, password)
+                                                .enqueue(new Callback<ApiService.ApiResponse<User>>() {
+                                                    @Override
+                                                    public void onResponse(Call<ApiService.ApiResponse<User>> call, Response<ApiService.ApiResponse<User>> response) {
+                                                        if(response.isSuccessful()) {
+                                                            assert response.body() != null;
+                                                            User user = response.body().getData();
+                                                            setUser(user);
+                                                        } else {
+                                                            Toast.makeText(SignInActivity.this, "Wrong password", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<ApiService.ApiResponse<User>> call, Throwable throwable) {
+                                                        Toast.makeText(SignInActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    } else {
+                                        Toast.makeText(SignInActivity.this, "Email not exist", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } else {
+                                    Toast.makeText(SignInActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiService.ApiResponse<Boolean>> call, Throwable throwable) {
+                                Toast.makeText(SignInActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
     }
 
     private void setUser(User u) {

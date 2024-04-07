@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
@@ -112,8 +113,10 @@ public class VerifyCodeActivity extends AppCompatActivity {
                         intent.putExtra("email",email);
                         startActivity(intent);
                     } else {
-                        Log.v(TAG, "wrong");
+                        Toast.makeText(VerifyCodeActivity.this, "Wrong OTP", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(VerifyCodeActivity.this, "OTP must have 4 characters", Toast.LENGTH_SHORT).show();
                 }
             }
         });

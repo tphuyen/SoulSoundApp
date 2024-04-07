@@ -54,15 +54,17 @@ public class ForgetPassword extends AppCompatActivity {
                                         Intent intent = new Intent(getApplicationContext(), VerifyCodeActivity.class);
                                         intent.putExtra("email",email);
                                         startActivity(intent);
+                                    } else {
+                                        Toast.makeText(ForgetPassword.this, "Email not exist", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(ForgetPassword.this, "Call Api Failed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ForgetPassword.this, "Reset Failed", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ApiService.ApiResponse<Boolean>> call, Throwable throwable) {
-                                Toast.makeText(ForgetPassword.this, "Call Api Failed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ForgetPassword.this, "Reset Failed", Toast.LENGTH_SHORT).show();
                             }
                         });
             }

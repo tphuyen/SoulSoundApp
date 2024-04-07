@@ -220,6 +220,10 @@ public class MediaPlayerService extends MediaBrowserService {
         SONG_STATE = 1;
     }
 
+    public static void playSTTSong() {
+        SONG_STATE = 0;
+    }
+
     public static void nextSong() {
         if (SONG_STATE == 0) {
             if (currentIndex < currentPlaylist.size() - 1) currentIndex += 1;

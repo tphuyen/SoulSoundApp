@@ -322,8 +322,9 @@ public class PlayMusicActivity extends AppCompatActivity {
             if (isShuffle) {
                 MediaPlayerService.playRandomSong();
             } else {
-                MediaPlayerService.nextSong();
+                MediaPlayerService.playSTTSong();
             }
+            MediaPlayerService.nextSong();
             updateUI();
         });
     }
@@ -355,8 +356,10 @@ public class PlayMusicActivity extends AppCompatActivity {
 //            MediaPlayerService.setShuffle(!isShuffle);
             if (isShuffle) {
                 ibShuffle.setImageResource(SHUFFLE_FILLED_ICON);
+                MediaPlayerService.playRandomSong();
             } else {
                 ibShuffle.setImageResource(SHUFFLE_ICON);
+                MediaPlayerService.playSTTSong();
             }
         });
     }
@@ -411,7 +414,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         int currentTime = MediaPlayerService.getCurrentPosition();
         int duration = MediaPlayerService.getDuration();
 
-        if (currentTime >= duration) {
+        if (currentTime >= duration - 1000) {
             MediaPlayerService.nextSong();
             updateSongInfo();
         } else {
