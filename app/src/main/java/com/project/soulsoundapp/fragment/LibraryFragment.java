@@ -69,6 +69,7 @@ public class LibraryFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 ArrayList<String> arrayListFavourite = new ArrayList<>(mFavorite);
                 bundle.putString("mTitle", "Favourite Songs");
+                bundle.putInt("mCover", R.drawable.favplaylist);
                 bundle.putStringArrayList("mFavorite", arrayListFavourite);
                 intent.putExtras(bundle);
                 startActivity(intent);
