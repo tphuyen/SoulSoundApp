@@ -40,8 +40,6 @@
         android:text="Song Name"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:ellipsize="end"
-        android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@id/tvMiniPlayerArtistName"
         app:layout_constraintStart_toEndOf="@id/ivMiniPlayerCover"
         app:layout_constraintTop_toTopOf="@id/ivMiniPlayerCover" />

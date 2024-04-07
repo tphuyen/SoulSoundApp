@@ -56,7 +56,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     ImageButton ibBack, ibPlayPause, ibNext, ibPrevious, ibFavorite, ibShuffle, ibMenu, ivClose;
     Button btnLyrics;
     SeekBar sbSongProgress;
-    MediaPlayerService mediaPlayerService;
     Song song;
     private boolean isShuffle = false;
     private static final int PAUSE_ICON = R.drawable.ic_pause;
@@ -76,21 +75,14 @@ public class PlayMusicActivity extends AppCompatActivity {
     private static final String KEY_EMAIL = "email";
     private String email;
     private DataManager dataManager;
-    private MiniPlayerFragment miniPlayerFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_music);
         mListComments = new ArrayList<>();
-        mediaPlayerService = MediaPlayerService.getInstance(getApplicationContext());
-        song = (Song) getIntent().getSerializableExtra("song");
-        mediaPlayerService.playSong(mediaPlayerService.getCurrentPlaylist().indexOf(song));
         mProgressDialog = new ProgressDialog(this);
         db = DatabaseHelper.getInstance(getApplicationContext());
-
-        miniPlayerFragment = MiniPlayerFragment.getInstance(getApplicationContext());
-        miniPlayerFragment.updateMiniPlayer();
-
+        song = MediaPlayerService.getCurrentSong();
         addControls();
         addEvents();
         updateUI();
@@ -140,9 +132,9 @@ public class PlayMusicActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mediaPlayerService != null) {
+//        if (mediaPlayerService != null) {
             updateUI();
-        }
+//        }
     }
 
     private void updateUI() {
@@ -161,18 +153,18 @@ public class PlayMusicActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar sbSongProgress, int progress, boolean fromUser) {
                 if (fromUser) {
-                    mediaPlayerService.seekTo(progress);
+                    MediaPlayerService.seekTo(progress);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar sbSongProgress) {
-                mediaPlayerService.pauseSong();
+                MediaPlayerService.pauseSong();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar sbSongProgress) {
-                mediaPlayerService.resumeSong();
+                MediaPlayerService.resumeSong();
                 updatePlayPauseButton();
             }
         });
@@ -316,10 +308,10 @@ public class PlayMusicActivity extends AppCompatActivity {
 
     public void togglePlayPauseBtn() {
         ibPlayPause.setOnClickListener(v -> {
-            if (mediaPlayerService.isPlaying()) {
-                mediaPlayerService.pauseSong();
+            if (MediaPlayerService.isPlaying()) {
+                MediaPlayerService.pauseSong();
             } else {
-                mediaPlayerService.resumeSong();
+                MediaPlayerService.resumeSong();
             }
             updateUI();
         });
@@ -328,9 +320,9 @@ public class PlayMusicActivity extends AppCompatActivity {
     public void setupNextBtn() {
         ibNext.setOnClickListener(v -> {
             if (isShuffle) {
-                mediaPlayerService.playRandomSong();
+                MediaPlayerService.playRandomSong();
             } else {
-                mediaPlayerService.nextSong();
+                MediaPlayerService.nextSong();
             }
             updateUI();
         });
@@ -338,7 +330,7 @@ public class PlayMusicActivity extends AppCompatActivity {
 
     public void setupPreviousBtn() {
         ibPrevious.setOnClickListener(v -> {
-            mediaPlayerService.previousSong();
+            MediaPlayerService.previousSong();
             updateUI();
         });
     }
@@ -360,7 +352,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     public void setupShuffleBtn() {
         ibShuffle.setOnClickListener(v -> {
             isShuffle = !isShuffle;
-            mediaPlayerService.setShuffle(!isShuffle);
+//            MediaPlayerService.setShuffle(!isShuffle);
             if (isShuffle) {
                 ibShuffle.setImageResource(SHUFFLE_FILLED_ICON);
             } else {
@@ -389,7 +381,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         });
 
 //        Set lyric
-        lyricManager = new LyricManager(getApplicationContext(), tvLyric, mediaPlayerService);
+        lyricManager = new LyricManager(getApplicationContext(), tvLyric);
         lyricManager.loadLyric(song.getLyricUrl());
 //        Display lyrics
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
@@ -403,7 +395,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void updateSongInfo() {
-        song = mediaPlayerService.getCurrentSong();
+        song = MediaPlayerService.getCurrentSong();
         tvTitle.setText(song.getTitle());
         tvArtist.setText(song.getArtist());
         Picasso.get().load(song.getCoverUrl()).into(ivSongCover);
@@ -411,16 +403,16 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     public void updatePlayPauseButton() {
-        int icon = mediaPlayerService.isPlaying() ? PAUSE_ICON : PLAY_ICON;
+        int icon = MediaPlayerService.isPlaying() ? PAUSE_ICON : PLAY_ICON;
         ibPlayPause.setBackgroundResource(icon);
     }
 
     private void updateSongTime() {
-        int currentTime = mediaPlayerService.getCurrentPosition();
-        int duration = mediaPlayerService.getDuration();
+        int currentTime = MediaPlayerService.getCurrentPosition();
+        int duration = MediaPlayerService.getDuration();
 
         if (currentTime >= duration) {
-            mediaPlayerService.nextSong();
+            MediaPlayerService.nextSong();
             updateSongInfo();
         } else {
             tvStartTime.setText(formatTime(currentTime));

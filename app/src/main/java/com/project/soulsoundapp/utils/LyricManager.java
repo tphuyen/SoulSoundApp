@@ -40,10 +40,9 @@ public class LyricManager {
     private Handler handler;
     private MediaPlayerService mps;
 
-    public LyricManager(Context context, TextView textView, MediaPlayerService mps) {
+    public LyricManager(Context context, TextView textView) {
         this.context = context;
         this.textView = textView;
-        this.mps = mps;
         lyrics = new ArrayList<>();
         handler = new Handler(Looper.getMainLooper()) {
             @Override

@@ -63,9 +63,9 @@ public interface ApiService {
     @POST("users/login")
     Call<ApiResponse<User>> loginApi(@Field("email") String email, @Field("password") String password);
 //    Call<ApiResponse<User>> loginApi(@Query("email") String email, @Query("password") String password);
-
+    @FormUrlEncoded
     @POST("users/register")
-    Call<ApiResponse<User>> registerApi(@Body User user, @Body String password);
+    Call<ApiResponse<User>> registerApi(@Field("email") String email, @Field("name") String fullName, @Field("password") String password);
     @FormUrlEncoded
     @POST("users/fwps")
     Call<ApiResponse<User>> forgotPassword(@Field("email") String email, @Field("code") String code);
@@ -78,6 +78,8 @@ public interface ApiService {
 
     @GET("songs")
     Call<ApiResponse<List<Song>>> getAllSongs();
+    @GET("songs/hitsong")
+    Call<ApiResponse<List<String>>> getHitSong();
     @GET("songs/{id}/comments")
     Call<ApiResponse<List<Comment>>> getCommentsBySongId(@Path("id") String id);
 
@@ -86,6 +88,12 @@ public interface ApiService {
 
     @GET("playlists")
     Call<ApiResponse<List<Playlist>>> getAllPlaylists();
+
+    @GET("playlists/discover")
+    Call<ApiResponse<List<String>>> getPlaylistDiscover();
+
+    @GET("playlists/top100")
+    Call<ApiResponse<List<String>>> getPlaylistTop100();
 
     @GET("categories")
     Call<ApiResponse<List<Category>>> getAllCategories();

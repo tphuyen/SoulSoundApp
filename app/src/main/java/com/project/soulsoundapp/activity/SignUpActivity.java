@@ -16,6 +16,12 @@ import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.model.User;
+import com.project.soulsoundapp.service.ApiService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -74,20 +80,20 @@ public class SignUpActivity extends AppCompatActivity {
                         tvPwError.setVisibility(View.GONE);
                     }
                     if (password.equals(confirmpw)) {
-                        boolean checkUserEmail = databaseHelper.checkMail(email);
-                        if (!checkUserEmail) {
-                            boolean insert = databaseHelper.insertatata(view.getContext(), email, name, password);
+                        ApiService.apiService.registerApi(email, name, password)
+                                .enqueue(new Callback<ApiService.ApiResponse<User>>() {
+                                    @Override
+                                    public void onResponse(Call<ApiService.ApiResponse<User>> call, Response<ApiService.ApiResponse<User>> response) {
+                                        Toast.makeText(SignUpActivity.this, "Sign up Successfully", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                                        startActivity(intent);
+                                    }
 
-                            if (insert) {
-                                Toast.makeText(SignUpActivity.this, "Sign up Successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(SignUpActivity.this, "Sign up Failed", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(SignUpActivity.this, "User already exists", Toast.LENGTH_SHORT).show();
-                        }
+                                    @Override
+                                    public void onFailure(Call<ApiService.ApiResponse<User>> call, Throwable throwable) {
+
+                                    }
+                                });
                     } else {
                         tvCheckPw.setVisibility(View.VISIBLE);
                         tvCheckPw.setText("Password not match");

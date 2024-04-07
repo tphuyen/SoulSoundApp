@@ -3,6 +3,7 @@ package com.project.soulsoundapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.activity.PlayMusicActivity;
 import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.service.MediaPlayerService;
 import com.project.soulsoundapp.utils.ItemClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -19,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
+    private static final String TAG = "SongAdapter";
     private List<Song> songs = new ArrayList<>();
     private Context context;
-    private Song song;
-    private ItemClickListener itemClickListener;
 
     public SongAdapter(Context context) {
         this.context = context;
@@ -42,20 +43,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
-        song = songs.get(position);
+        Song song = songs.get(position);
 
         if (song == null) return;
         holder.tvSongTitle.setText(song.getTitle());
         holder.tvSongArtistName.setText(song.getArtist());
         Picasso.get().load(song.getThumbnailUrl()).into(holder.ivSongImage);
         holder.itemView.setOnClickListener(view -> {
-            if (itemClickListener != null) {
-                itemClickListener.onItemClick(song);
-            }
+            Log.d(TAG, "Start set Playlist");
+            MediaPlayerService.setPlaylist(songs, position);
+            Log.d(TAG, "Start Play Song");
+            MediaPlayerService.playSong();
             Intent intent = new Intent(context, PlayMusicActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("song", song);
-            intent.putExtras(bundle);
             context.startActivity(intent);
         });
     }
@@ -77,8 +76,5 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             tvSongArtistName = (TextView) itemView.findViewById(R.id.tvSongArtistName);
         }
     }
-
-    public void setItemClickListener(ItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
+    
 }

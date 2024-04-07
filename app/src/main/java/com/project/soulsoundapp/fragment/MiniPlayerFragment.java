@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.project.soulsoundapp.service.MediaPlayerService;
 import com.squareup.picasso.Picasso;
 
 public class MiniPlayerFragment extends Fragment {
+    private static final String TAG = "MiniPlayerFragment";
     private ImageView ivMiniPlayerCover;
     private TextView tvMiniPlayerSongName, tvMiniPlayerArtistName;
     private ImageButton ibMiniPlayerPrevious, ibMiniPlayerPlayPause, ibMiniPlayerNext;
@@ -54,8 +56,7 @@ public class MiniPlayerFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mediaPlayerService = MediaPlayerService.getInstance(getContext());
-        song = mediaPlayerService.getCurrentSong();
+        song = MediaPlayerService.getCurrentSong();
         super.onViewCreated(view, savedInstanceState);
         addControl(view);
         addEvent();
@@ -83,21 +84,21 @@ public class MiniPlayerFragment extends Fragment {
         });
 
         ibMiniPlayerPrevious.setOnClickListener(v -> {
-            mediaPlayerService.previousSong();
+            MediaPlayerService.previousSong();
             setMiniPlayer();
         });
 
         ibMiniPlayerPlayPause.setOnClickListener(v -> {
-            if (mediaPlayerService.isPlaying()) {
-                mediaPlayerService.pauseSong();
+            if (MediaPlayerService.isPlaying()) {
+                MediaPlayerService.pauseSong();
             } else {
-                mediaPlayerService.resumeSong();
+                MediaPlayerService.resumeSong();
             }
             setMiniPlayer();
         });
 
         ibMiniPlayerNext.setOnClickListener(v -> {
-            mediaPlayerService.nextSong();
+            MediaPlayerService.nextSong();
             setMiniPlayer();
         });
 
@@ -110,20 +111,21 @@ public class MiniPlayerFragment extends Fragment {
     }
 
     public void setMiniPlayer() {
-        if(prefs.contains(KEY_IS_PLAYING)) {
-            layout_mini_player_container.setVisibility(View.VISIBLE);
-            mediaPlayerService.updateState();
+        song = MediaPlayerService.getSongSaved();
 
-            updateMiniPlayer();
+        if(song != null) {
+            Log.d(TAG, "Song currently playing :: " + song.getTitle());
+            layout_mini_player_container.setVisibility(View.VISIBLE);
+            updateMiniPlayer(song);
         } else {
             layout_mini_player_container.setVisibility(View.GONE);
         }
     }
 
-    public void updateMiniPlayer() {
+    public void updateMiniPlayer(Song song) {
         Picasso.get().load(song.getThumbnailUrl()).into(ivMiniPlayerCover);
         tvMiniPlayerSongName.setText(song.getTitle());
         tvMiniPlayerArtistName.setText(song.getArtist());
-        ibMiniPlayerPlayPause.setBackgroundResource(mediaPlayerService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
+        ibMiniPlayerPlayPause.setBackgroundResource(MediaPlayerService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
     }
 }

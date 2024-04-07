@@ -28,9 +28,15 @@ import com.project.soulsoundapp.adapter.SongAdapter;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Playlist;
 import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.service.ApiService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 //import com.project.soulsoundapp.adapter.ImageSliderAdapter;
 public class HomeFragment extends Fragment {
     private RecyclerView rvDiscover, rvHitSong, rvTop100;
@@ -110,41 +116,96 @@ public class HomeFragment extends Fragment {
 
     private void addControl(View view) {
         db = DatabaseHelper.getInstance(view.getContext());
-
+//  SETUP DISCOVER
         rvDiscover = view.findViewById(R.id.rvDiscover);
-        PlaylistHorizontalAdpater playlistHorizontalAdpater = new PlaylistHorizontalAdpater(getContext());
-        playlistHorizontalAdpater.setPlaylists(getPlaylists());
-        LinearLayoutManager managerDiscover = new LinearLayoutManager(getContext());
-        managerDiscover.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvDiscover.setLayoutManager(managerDiscover);
-        rvDiscover.setAdapter(playlistHorizontalAdpater);
+        ApiService.apiService.getPlaylistDiscover()
+                .enqueue(new Callback<ApiService.ApiResponse<List<String>>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<List<String>>> call, Response<ApiService.ApiResponse<List<String>>> response) {
+                        if(response.isSuccessful()) {
+                            assert response.body() != null;
+                            List<String> playlistDiscover = response.body().getData();
+                            if(playlistDiscover != null && playlistDiscover.size() > 0) {
+                                PlaylistHorizontalAdpater playlistHorizontalAdpater = new PlaylistHorizontalAdpater(getContext());
+                                playlistHorizontalAdpater.setPlaylists(db.getPlaylistsByIds(playlistDiscover));
+                                LinearLayoutManager managerDiscover = new LinearLayoutManager(getContext());
+                                managerDiscover.setOrientation(LinearLayoutManager.HORIZONTAL);
+                                rvDiscover.setLayoutManager(managerDiscover);
+                                rvDiscover.setAdapter(playlistHorizontalAdpater);
+                            } else {
+                                rvDiscover.setVisibility(View.GONE);
+                            }
+                        } else {
+                            rvDiscover.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<List<String>>> call, Throwable throwable) {
+                        rvDiscover.setVisibility(View.GONE);
+                    }
+                });
+
 
         rvHitSong = view.findViewById(R.id.rvHitSong);
-        SongAdapter songAdapter = new SongAdapter(getContext());
-        songAdapter.setSongs(getSong());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
-        gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        ApiService.apiService.getHitSong()
+                .enqueue(new Callback<ApiService.ApiResponse<List<String>>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<List<String>>> call, Response<ApiService.ApiResponse<List<String>>> response) {
+                        if(response.isSuccessful()) {
+                            assert response.body() != null;
+                            List<String> hitSong = response.body().getData();
+                            if(hitSong != null && hitSong.size() > 0) {
+                                SongAdapter songAdapter = new SongAdapter(getContext());
+                                songAdapter.setSongs(db.getSongByIds(hitSong));
+                                GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 4);
+                                gridLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
-        rvHitSong.setLayoutManager(gridLayoutManager);
-        rvHitSong.setAdapter(songAdapter);
-//
+                                rvHitSong.setLayoutManager(gridLayoutManager);
+                                rvHitSong.setAdapter(songAdapter);
+                            } else {
+                                rvHitSong.setVisibility(View.GONE);
+                            }
+                        } else {
+                            rvHitSong.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<List<String>>> call, Throwable throwable) {
+                        rvHitSong.setVisibility(View.GONE);
+                    }
+                });
+
         rvTop100 = view.findViewById(R.id.rvTop100);
-        PlaylistHorizontalAdpater playlistHorizontalAdpaterTop100 = new PlaylistHorizontalAdpater(getContext());
-        playlistHorizontalAdpaterTop100.setPlaylists(getPlaylists());
-        LinearLayoutManager managerTop100 = new LinearLayoutManager(getContext());
-        managerTop100.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvTop100.setLayoutManager(managerTop100);
-        rvTop100.setAdapter(playlistHorizontalAdpaterTop100);
-    }
+        ApiService.apiService.getPlaylistTop100()
+                .enqueue(new Callback<ApiService.ApiResponse<List<String>>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<List<String>>> call, Response<ApiService.ApiResponse<List<String>>> response) {
+                        if(response.isSuccessful()) {
+                            assert response.body() != null;
+                            List<String> top100 = response.body().getData();
+                            if(top100 != null && top100.size() > 0) {
+                                PlaylistHorizontalAdpater playlistHorizontalAdpaterTop100 = new PlaylistHorizontalAdpater(getContext());
+                                playlistHorizontalAdpaterTop100.setPlaylists(db.getPlaylistsByIds(top100));
+                                LinearLayoutManager managerTop100 = new LinearLayoutManager(getContext());
+                                managerTop100.setOrientation(LinearLayoutManager.HORIZONTAL);
+                                rvTop100.setLayoutManager(managerTop100);
+                                rvTop100.setAdapter(playlistHorizontalAdpaterTop100);
+                            } else {
+                                rvTop100.setVisibility(View.GONE);
+                            }
+                        } else {
+                            rvTop100.setVisibility(View.GONE);
+                        }
 
-    private List<Song> getSong() {
-        List<Song> songs = new ArrayList<>();
-        songs = db.getAllSongs();
-        return songs;
-    }
 
-    private List<Playlist> getPlaylists() {
-        return db.getAllPlaylists();
-    }
+                    }
 
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<List<String>>> call, Throwable throwable) {
+                        rvTop100.setVisibility(View.GONE);
+                    }
+                });
+    }
 }

@@ -35,13 +35,11 @@ public class SearchFragment extends Fragment {
     private TextView tvSearchResult;
 
     //    private CategoryAdapter categoryAdapter;
-    private SongAdapter songAdapter;
     private DatabaseHelper db;
     private static final String TAG = "SearchFragment";
 
     public SearchFragment() {
 //        categoryAdapter = new CategoryAdapter(getContext());
-        songAdapter = new SongAdapter(getContext());
         db = DatabaseHelper.getInstance(getContext());
     }
 
@@ -72,14 +70,6 @@ public class SearchFragment extends Fragment {
                 return true;
             }
             return false;
-        });
-
-        songAdapter.setItemClickListener(song -> {
-            Intent intent = new Intent(getContext(), PlayMusicActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("song", song);
-            intent.putExtras(bundle);
-            startActivity(intent);
         });
 
         ivCloseIcon.setOnClickListener(v -> {
@@ -132,8 +122,9 @@ public class SearchFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         rvResultsForSearch.setLayoutManager(layoutManager);
+        SongAdapter songAdapter = new SongAdapter(getContext());
         songAdapter.setSongs(songs);
-
+        Log.d(TAG, "Songs from result: " + songs.size());
         rvResultsForSearch.setAdapter(songAdapter);
     }
 

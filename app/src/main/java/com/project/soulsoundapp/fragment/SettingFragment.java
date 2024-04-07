@@ -43,6 +43,17 @@ public class SettingFragment extends Fragment {
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
 
+
+//    Preference for music player
+SharedPreferences.Editor editorMusic;
+    private static SharedPreferences prefs;
+    private static final String SHARED_PREF_NAME_MUSIC = "player_music";
+    private static final String KEY_SONG_ID = "songId";
+    private static final String KEY_SONG_INDEX = "songIndex";
+    private static final String KEY_PLAYLIST = "playlist";
+    private static final String KEY_CURRENT_TIME = "currentTime";
+    private static final String KEY_IS_PLAYING = "isPlaying";
+
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -67,7 +78,9 @@ public class SettingFragment extends Fragment {
         tvNameUser = view.findViewById(R.id.tvNameUser);
 
         sharedPreferences = getContext().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        prefs = getContext().getSharedPreferences(SHARED_PREF_NAME_MUSIC, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        editorMusic = prefs.edit();
 
         String fullname;
         try {
@@ -86,6 +99,13 @@ public class SettingFragment extends Fragment {
                 editor.remove(KEY_NAME);
                 editor.remove(KEY_EMAIL);
                 editor.apply();
+
+                editorMusic.remove(KEY_SONG_ID);
+                editorMusic.remove(KEY_SONG_INDEX);
+                editorMusic.remove(KEY_PLAYLIST);
+                editorMusic.remove(KEY_CURRENT_TIME);
+                editorMusic.remove(KEY_IS_PLAYING);
+                editorMusic.apply();
 
                 boolean isNameRemoved = !sharedPreferences.contains(KEY_NAME);
                 boolean isEmailRemoved = !sharedPreferences.contains(KEY_EMAIL);
