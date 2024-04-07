@@ -1,75 +1,81 @@
 package com.project.soulsoundapp.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.*;
-import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.fragment.HomeFragment;
 import com.project.soulsoundapp.fragment.LibraryFragment;
-
+import com.project.soulsoundapp.fragment.MiniPlayerFragment;
 import com.project.soulsoundapp.fragment.SearchFragment;
 import com.project.soulsoundapp.fragment.SettingFragment;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    BottomNavigationView bottomNavigationView;
+    DrawerLayout drawerLayout;
+    FrameLayout fragmentLayout;
+    FrameLayout flMiniPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initViewPager();
+
+        replaceFragment(new HomeFragment());
+
+//        drawerLayout = findViewById(R.id.drawer_layout);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+//        fragmentLayout = findViewById(R.id.fragment_layout);
+//        fab = findViewById(R.id.fab);
+
+        bottomNavigationView.setBackground(null);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.home) {
+                replaceFragment(new HomeFragment());
+            } else if (itemId == R.id.search) {
+                replaceFragment(new SearchFragment());
+            } else if (itemId == R.id.library) {
+                replaceFragment(new LibraryFragment());
+            } else if (itemId == R.id.settings) {
+                replaceFragment(new SettingFragment());
+            } else {
+                replaceFragment(new SettingFragment()); // Default handling
+            }
+            return true;
+        });
+
+        addControls();
+        setMiniPlayer();
     }
 
-    private void initViewPager() {
-        ViewPager viewPager = findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new HomeFragment(), "Home");
-        viewPagerAdapter.addFragment(new SearchFragment(), "Search");
-        viewPagerAdapter.addFragment(new LibraryFragment(), "Library");
-        viewPagerAdapter.addFragment(new SettingFragment(), "Setting");
-
-//        viewPagerAdapter.addFragment(new TestFragment(), "Test");
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+    private void addControls() {
+        flMiniPlayer = findViewById(R.id.flMiniPlayer);
     }
 
-    public static class ViewPagerAdapter extends FragmentPagerAdapter {
-        private ArrayList<Fragment> fragments;
-        private ArrayList<String> titles;
-        public ViewPagerAdapter(@NonNull FragmentManager fm) {
-            super(fm);
-            this.fragments = new ArrayList<Fragment>();
-            this.titles = new ArrayList<>();
-        }
+    private void setMiniPlayer() {
+        flMiniPlayer.setVisibility(View.VISIBLE);
 
-        void addFragment(Fragment fragment, String title) {
-            fragments.add(fragment);
-            titles.add(title);
-        }
+        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment(this);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.flMiniPlayer, miniPlayerFragment).commit();
+    }
 
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles.get(position);
-        }
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_layout, fragment);
+        fragmentTransaction.commit();
     }
 }

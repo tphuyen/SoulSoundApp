@@ -37,6 +37,7 @@ public class SearchFragment extends Fragment {
     private ImageView ivCloseIcon;
     private RecyclerView rvCategories, rvResultsForSearch;
     private EditText etSearch;
+    private TextView tvSearchResult;
 
 //    private CategoryAdapter categoryAdapter;
     private SongAdapter songAdapter;
@@ -70,7 +71,10 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String key = v.getText().toString();
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT ||
+                        actionId == EditorInfo.IME_ACTION_DONE ||
+                        actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_GO) {
                     if(key.trim().length() > 0) {
                         searchSongByTitle(v.getText().toString().trim());
                     } else {
@@ -88,6 +92,10 @@ public class SearchFragment extends Fragment {
             public void onClick(View v) {
                 etSearch.setText("");
                 etSearch.clearFocus();
+                List<Category> categories = db.getAllCategories();
+                setCategories(categories);
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
             }
         });
 
@@ -98,6 +106,7 @@ public class SearchFragment extends Fragment {
         rvResultsForSearch = view.findViewById(R.id.rvResultsForSearch);
         etSearch = view.findViewById(R.id.etSearch);
         ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
+        tvSearchResult = view.findViewById(R.id.tvSearchResult);
 
         List<Category> categories = db.getAllCategories();
 
@@ -110,6 +119,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void setCategories(List<Category> categories) {
+        tvSearchResult.setText("Discover Categories");
         rvCategories.setVisibility(View.VISIBLE);
         rvResultsForSearch.setVisibility(View.GONE);
 
@@ -140,11 +150,11 @@ public class SearchFragment extends Fragment {
         List<Song> songs = db.getSongsByTitle(query);
 
         if(!songs.isEmpty()) {
-            setResultForSearch(songs);
+            tvSearchResult.setText("Search Results");
+        } else {
+            tvSearchResult.setText("No Results");
         }
-
-        List<Category> categories = db.getAllCategories();
-        setCategories(categories);
+        setResultForSearch(songs);
 
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);

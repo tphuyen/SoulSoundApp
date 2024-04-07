@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 boolean isEmaiExist = sharedPreferences.contains(KEY_EMAIL);
                 Intent intent;
                 if(isNameExist && isEmaiExist) {
-                    intent = new Intent(SplashActivity.this, MainActivity2.class);
+                    intent = new Intent(SplashActivity.this, MainActivity.class);
                 } else {
                     intent = new Intent(SplashActivity.this, SignInActivity.class);
                 }

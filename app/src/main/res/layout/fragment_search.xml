@@ -31,7 +31,6 @@
                 android:background="@drawable/bg_img_radious"
                 android:layout_marginVertical="15dp"
                 android:padding="13dp"
-                android:alpha="0.8"
                 android:drawableStart="@drawable/ic_search"
                 android:drawablePadding="10dp"
                 android:ems="10"
@@ -55,6 +54,7 @@
 
 
         <TextView
+            android:id="@+id/tvSearchResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Discover Category"

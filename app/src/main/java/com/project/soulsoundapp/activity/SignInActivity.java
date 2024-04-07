@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -138,7 +137,7 @@ public class SignInActivity extends AppCompatActivity {
         dataManager.setFavorites(u.getEmail(), u.getFavorites());
 
         Toast.makeText(SignInActivity.this, "Sign In Successful", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(SignInActivity.this, MainActivity2.class);
+        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
         startActivity(intent);
     }
 }

@@ -68,7 +68,7 @@ public class LibraryFragment extends Fragment {
                 Intent intent = new Intent(getContext(), PlaylistActivity.class);
                 Bundle bundle = new Bundle();
                 ArrayList<String> arrayListFavourite = new ArrayList<>(mFavorite);
-                bundle.putString("mTitle", "Bài hát yêu thích");
+                bundle.putString("mTitle", "Favourite Songs");
                 bundle.putStringArrayList("mFavorite", arrayListFavourite);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -86,7 +86,7 @@ public class LibraryFragment extends Fragment {
 
     public void setFavourite() {
         mFavorite = db.getFavoriteSongs();
-        item_tvFavouriteName.setText("Bài hát yêu thích");
+        item_tvFavouriteName.setText("Favourite Songs");
         if(mFavorite.size() > 0) {
             item_tvFavouriteSongCount.setText(Integer.toString(mFavorite.size()));
         } else {
