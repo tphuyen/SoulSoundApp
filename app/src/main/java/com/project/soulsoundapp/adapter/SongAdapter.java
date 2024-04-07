@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.activity.PlayMusicActivity;
 import com.project.soulsoundapp.model.Song;
+import com.project.soulsoundapp.utils.ItemClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import java.util.List;
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
     private List<Song> songs = new ArrayList<>();
     private Context context;
+    private Song song;
+    private ItemClickListener itemClickListener;
 
     public SongAdapter(Context context) {
         this.context = context;
@@ -39,13 +42,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
-        Song song = songs.get(position);
+        song = songs.get(position);
 
         if (song == null) return;
         holder.tvSongTitle.setText(song.getTitle());
         holder.tvSongArtistName.setText(song.getArtist());
         Picasso.get().load(song.getThumbnailUrl()).into(holder.ivSongImage);
         holder.itemView.setOnClickListener(view -> {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(song);
+            }
             Intent intent = new Intent(context, PlayMusicActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("song", song);
@@ -70,5 +76,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             tvSongTitle = (TextView) itemView.findViewById(R.id.tvSongTitle);
             tvSongArtistName = (TextView) itemView.findViewById(R.id.tvSongArtistName);
         }
+    }
+
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
     }
 }
