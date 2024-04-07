@@ -73,6 +73,15 @@ public class MiniPlayerFragment extends Fragment {
     }
 
     private void addEvent() {
+
+        layout_mini_player_container.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), PlayMusicActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("song", song);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        });
+
         ibMiniPlayerPrevious.setOnClickListener(v -> {
             mediaPlayerService.previousSong();
             setMiniPlayer();
