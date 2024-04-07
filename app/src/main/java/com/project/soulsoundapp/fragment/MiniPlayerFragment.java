@@ -30,11 +30,8 @@ public class MiniPlayerFragment extends Fragment {
     private static MiniPlayerFragment instance;
     private ViewGroup layout_mini_player_container;
     private SharedPreferences prefs;
+    private Song song;
     private static final String SHARED_PREF_NAME = "player_music";
-    private static final String KEY_SONG_ID = "songId";
-    private static final String KEY_SONG_INDEX = "songIndex";
-    private static final String KEY_PLAYLIST_ID = "playlistId";
-    private static final String KEY_CURRENT_TIME = "currentTime";
     private static final String KEY_IS_PLAYING = "isPlaying";
 
     public MiniPlayerFragment(Context context) {
@@ -52,13 +49,13 @@ public class MiniPlayerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mini_player, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_mini_player, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mediaPlayerService = MediaPlayerService.getInstance(getContext());
+        song = mediaPlayerService.getCurrentSong();
         super.onViewCreated(view, savedInstanceState);
         addControl(view);
         addEvent();
@@ -84,11 +81,10 @@ public class MiniPlayerFragment extends Fragment {
         ibMiniPlayerPlayPause.setOnClickListener(v -> {
             if (mediaPlayerService.isPlaying()) {
                 mediaPlayerService.pauseSong();
-                ibMiniPlayerPlayPause.setBackgroundResource(R.drawable.ic_play);
             } else {
                 mediaPlayerService.resumeSong();
-                ibMiniPlayerPlayPause.setBackgroundResource(R.drawable.ic_pause);
             }
+            setMiniPlayer();
         });
 
         ibMiniPlayerNext.setOnClickListener(v -> {
@@ -102,13 +98,16 @@ public class MiniPlayerFragment extends Fragment {
             layout_mini_player_container.setVisibility(View.VISIBLE);
             mediaPlayerService.updateState();
 
-            Song currentSong = mediaPlayerService.getCurrentSong();
-            Picasso.get().load(currentSong.getThumbnailUrl()).into(ivMiniPlayerCover);
-            tvMiniPlayerSongName.setText(currentSong.getTitle());
-            tvMiniPlayerArtistName.setText(currentSong.getArtist());
-            ibMiniPlayerPlayPause.setBackgroundResource(mediaPlayerService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
+            updateMiniPlayer();
         } else {
             layout_mini_player_container.setVisibility(View.GONE);
         }
+    }
+
+    public void updateMiniPlayer() {
+        Picasso.get().load(song.getThumbnailUrl()).into(ivMiniPlayerCover);
+        tvMiniPlayerSongName.setText(song.getTitle());
+        tvMiniPlayerArtistName.setText(song.getArtist());
+        ibMiniPlayerPlayPause.setBackgroundResource(mediaPlayerService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
     }
 }

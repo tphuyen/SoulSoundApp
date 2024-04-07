@@ -1,15 +1,11 @@
 package com.project.soulsoundapp.fragment;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.*;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,14 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.project.soulsoundapp.R;
-import com.project.soulsoundapp.activity.PlaylistActivity;
+import com.project.soulsoundapp.activity.PlayMusicActivity;
 import com.project.soulsoundapp.adapter.CategoryAdapter;
 import com.project.soulsoundapp.adapter.SongAdapter;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Category;
 import com.project.soulsoundapp.model.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
@@ -39,9 +34,8 @@ public class SearchFragment extends Fragment {
     private EditText etSearch;
     private TextView tvSearchResult;
 
-//    private CategoryAdapter categoryAdapter;
+    //    private CategoryAdapter categoryAdapter;
     private SongAdapter songAdapter;
-
     private DatabaseHelper db;
     private static final String TAG = "SearchFragment";
 
@@ -52,57 +46,54 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        return view;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         addControls(view);
-        addEvents(view);
+        addEvents();
     }
 
-    private void addEvents(View view) {
-        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                String key = v.getText().toString();
-                if (actionId == EditorInfo.IME_ACTION_NEXT ||
-                        actionId == EditorInfo.IME_ACTION_DONE ||
-                        actionId == EditorInfo.IME_ACTION_SEARCH ||
-                        actionId == EditorInfo.IME_ACTION_GO) {
-                    if(key.trim().length() > 0) {
-                        searchSongByTitle(v.getText().toString().trim());
-                    } else {
-                        List<Category> categories = db.getAllCategories();
-                        setCategories(categories);
-                    }
-                    return true;
+    private void addEvents() {
+        etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            String key = v.getText().toString().trim();
+            if (actionId == EditorInfo.IME_ACTION_NEXT ||
+                actionId == EditorInfo.IME_ACTION_DONE ||
+                actionId == EditorInfo.IME_ACTION_SEARCH ||
+                actionId == EditorInfo.IME_ACTION_GO) {
+                if (!key.isEmpty()) {
+                    searchSongByTitle(key);
+                } else {
+                    setCategories(db.getAllCategories());
                 }
-                return false;
+                return true;
             }
+            return false;
         });
-      
-        ivCloseIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etSearch.setText("");
-                etSearch.clearFocus();
-                List<Category> categories = db.getAllCategories();
-                setCategories(categories);
-                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
-            }
+
+        songAdapter.setItemClickListener(song -> {
+            Intent intent = new Intent(getContext(), PlayMusicActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("song", song);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        });
+
+        ivCloseIcon.setOnClickListener(v -> {
+            etSearch.setText("");
+            etSearch.clearFocus();
+            setCategories(db.getAllCategories());
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
         });
 
     }
 
     public void addControls(View view) {
-        rvCategories =view.findViewById(R.id.rvCategories);
+        rvCategories = view.findViewById(R.id.rvCategories);
         rvResultsForSearch = view.findViewById(R.id.rvResultsForSearch);
         etSearch = view.findViewById(R.id.etSearch);
         ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
@@ -149,11 +140,7 @@ public class SearchFragment extends Fragment {
     private void searchSongByTitle(String query) {
         List<Song> songs = db.getSongsByTitle(query);
 
-        if(!songs.isEmpty()) {
-            tvSearchResult.setText("Search Results");
-        } else {
-            tvSearchResult.setText("No Results");
-        }
+        tvSearchResult.setText(songs.isEmpty() ? "No Results" : "Search Results");
         setResultForSearch(songs);
 
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -24,18 +23,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.project.soulsoundapp.R;
+import com.project.soulsoundapp.fragment.MiniPlayerFragment;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Song;
 import com.project.soulsoundapp.service.ApiService;
 import com.project.soulsoundapp.service.MediaPlayerService;
-//import com.project.soulsoundapp.utils.CommentManager;
 import com.project.soulsoundapp.utils.DataManager;
 import com.squareup.picasso.Picasso;
 import com.project.soulsoundapp.adapter.CommentAdapter;
@@ -51,22 +47,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlayMusicActivity extends AppCompatActivity {
-//    VIEW OF COMMENT DIALOG
     RecyclerView rvComments;
     TextView tvNoComments;
     ImageButton ibSend;
-
     EditText etComment;
-
     ImageView ivBackground, ivSongCover;
-    TextView tvStartTime, tvEndTime, tvTitle, tvArtist, tvLyrics;
+    TextView tvStartTime, tvEndTime, tvTitle, tvArtist;
     ImageButton ibBack, ibPlayPause, ibNext, ibPrevious, ibFavorite, ibShuffle, ibMenu, ivClose;
-    Button btnLyrics, btnCloseLyrics;
+    Button btnLyrics;
     SeekBar sbSongProgress;
-    BottomSheetDialog bottomSheetDialog;
     MediaPlayerService mediaPlayerService;
     Song song;
-    private boolean isShuffle = false, isFavorite = false;
+    private boolean isShuffle = false;
     private static final int PAUSE_ICON = R.drawable.ic_pause;
     private static final int PLAY_ICON = R.drawable.ic_play;
     private static final int FAVORITE_ICON = R.drawable.ic_favorite;
@@ -81,10 +73,10 @@ public class PlayMusicActivity extends AppCompatActivity {
     private DatabaseHelper db;
     SharedPreferences sharedPreferences;
     private static final String SHARED_PREF_NAME = "mypref";
-    private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private String email;
     private DataManager dataManager;
+    private MiniPlayerFragment miniPlayerFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +87,10 @@ public class PlayMusicActivity extends AppCompatActivity {
         mediaPlayerService.playSong(mediaPlayerService.getCurrentPlaylist().indexOf(song));
         mProgressDialog = new ProgressDialog(this);
         db = DatabaseHelper.getInstance(getApplicationContext());
+
+        miniPlayerFragment = MiniPlayerFragment.getInstance(getApplicationContext());
+        miniPlayerFragment.updateMiniPlayer();
+
         addControls();
         addEvents();
         updateUI();
@@ -113,6 +109,9 @@ public class PlayMusicActivity extends AppCompatActivity {
         ibMenu = findViewById(R.id.ibMenu);
         ibShuffle = findViewById(R.id.ibShuffle);
         btnLyrics = findViewById(R.id.btnLyrics);
+        ibNext = findViewById(R.id.ibNext);
+        ibPrevious = findViewById(R.id.ibPrevious);
+        ibFavorite = findViewById(R.id.ibFavorite);
 
         dataManager = DataManager.getInstance(getApplicationContext());
         sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
@@ -150,6 +149,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         updateSongInfo();
         updatePlayPauseButton();
         updateSongTime();
+        updateFavoriteBtn();
     }
 
     private void setupBackBtn() {
@@ -326,7 +326,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     public void setupNextBtn() {
-        ibNext = findViewById(R.id.ibNext);
         ibNext.setOnClickListener(v -> {
             if (isShuffle) {
                 mediaPlayerService.playRandomSong();
@@ -338,7 +337,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     public void setupPreviousBtn() {
-        ibPrevious = findViewById(R.id.ibPrevious);
         ibPrevious.setOnClickListener(v -> {
             mediaPlayerService.previousSong();
             updateUI();
@@ -346,12 +344,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void setupFavoriteBtn() {
-        ibFavorite = findViewById(R.id.ibFavorite);
-        if(db.isFavoriteExists(email, song.getId())) {
-            ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
-        } else {
-            ibFavorite.setImageResource(FAVORITE_ICON);
-        }
         ibFavorite.setOnClickListener(v -> {
             if (db.isFavoriteExists(email, song.getId())) {
                 db.removeFavorite(email, song.getId());
@@ -448,8 +440,8 @@ public class PlayMusicActivity extends AppCompatActivity {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
-    private void updateFavoriteButton() {
-        if (db.isFavoriteExists("userId", song.getId())) {
+    private void updateFavoriteBtn() {
+        if (db.isFavoriteExists(email, song.getId())) {
             ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
         } else {
             ibFavorite.setImageResource(FAVORITE_ICON);
