@@ -69,8 +69,6 @@ public class SearchFragment extends Fragment {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 String key = v.getText().toString();
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     if(key.trim().length() > 0) {
                         searchSongByTitle(v.getText().toString().trim());
                     } else {
@@ -131,9 +129,16 @@ public class SearchFragment extends Fragment {
 
     private void searchSongByTitle(String query) {
         List<Song> songs = db.getSongsByTitle(query);
-        if(songs.size() > 0) {
+
+        if(!songs.isEmpty()) {
             setResultForSearch(songs);
         }
+
+        List<Category> categories = db.getAllCategories();
+        setCategories(categories);
+
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
     }
 
 }
