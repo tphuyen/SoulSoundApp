@@ -19,8 +19,14 @@ import android.widget.TextView;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.model.User;
+import com.project.soulsoundapp.service.ApiService;
 
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VerifyCodeActivity extends AppCompatActivity {
     private static final String TAG = "VerifyCodeActivity";
@@ -67,7 +73,18 @@ public class VerifyCodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verify_code);
 
         code = randomCode();
-        Log.d(TAG, "code verify :" + code);
+        ApiService.apiService.forgotPassword(getIntent().getStringExtra("email") ,Integer.toString(code))
+                        .enqueue(new Callback<ApiService.ApiResponse<User>>() {
+                            @Override
+                            public void onResponse(Call<ApiService.ApiResponse<User>> call, Response<ApiService.ApiResponse<User>> response) {
+
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiService.ApiResponse<User>> call, Throwable throwable) {
+
+                            }
+                        });
         addControls();
         addEvents();
         showKeyboard(otpET1);

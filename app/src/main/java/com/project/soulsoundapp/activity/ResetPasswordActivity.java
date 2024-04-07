@@ -14,6 +14,11 @@ import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.service.ApiService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ResetPasswordActivity extends AppCompatActivity {
     TextView tvEmailReset;
@@ -49,14 +54,26 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     Toast.makeText(ResetPasswordActivity.this, "Fill all the fields", Toast.LENGTH_SHORT).show();
                 }else {
                     if (password.equals(repassword)) {
-                        boolean checkpwupdate = databaseHelper.updatePw(email, password);
-                        if (checkpwupdate) {
-                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(ResetPasswordActivity.this, "Password Updates Successful", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(ResetPasswordActivity.this, "Password Not Update", Toast.LENGTH_SHORT).show();
-                        }
+//                        boolean checkpwupdate = databaseHelper.updatePw(email, password);
+                        ApiService.apiService.updatePassword(email, password)
+                                .enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        if (response.isSuccessful()) {
+                                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                                            startActivity(intent);
+                                            Toast.makeText(ResetPasswordActivity.this, "Password Updates Successful", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(ResetPasswordActivity.this, "Password Not Update", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable throwable) {
+                                        Toast.makeText(ResetPasswordActivity.this, "Password Not Update", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
                     } else {
                         Toast.makeText(ResetPasswordActivity.this, "Password Not Matching", Toast.LENGTH_SHORT).show();
                     }

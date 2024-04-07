@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.project.soulsoundapp.model.Song;
 import com.project.soulsoundapp.service.ApiService;
 import com.project.soulsoundapp.service.MediaPlayerService;
 //import com.project.soulsoundapp.utils.CommentManager;
+import com.project.soulsoundapp.utils.DataManager;
 import com.squareup.picasso.Picasso;
 import com.project.soulsoundapp.adapter.CommentAdapter;
 import com.project.soulsoundapp.model.Comment;
@@ -77,7 +79,12 @@ public class PlayMusicActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private static final String TAG = "PlayMusicActivity";
     private DatabaseHelper db;
-
+    SharedPreferences sharedPreferences;
+    private static final String SHARED_PREF_NAME = "mypref";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_EMAIL = "email";
+    private String email;
+    private DataManager dataManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +114,9 @@ public class PlayMusicActivity extends AppCompatActivity {
         ibShuffle = findViewById(R.id.ibShuffle);
         btnLyrics = findViewById(R.id.btnLyrics);
 
-//        commentManager = CommentManager.getInstance(getApplicationContext());
+        dataManager = DataManager.getInstance(getApplicationContext());
+        sharedPreferences = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+        email = sharedPreferences.getString(KEY_EMAIL, null);
     }
 
     private void addEvents() {
@@ -235,7 +244,7 @@ public class PlayMusicActivity extends AppCompatActivity {
                 String content = etComment.getText().toString().trim();
 
                 if(content.length() > 0) {
-                    Comment comment = new Comment(song.getId(), "thangvb.dev@gmail.com", content);
+                    Comment comment = new Comment(song.getId(), email, content);
                     sendCommentAPI(comment);
                 }
 
@@ -338,13 +347,20 @@ public class PlayMusicActivity extends AppCompatActivity {
 
     private void setupFavoriteBtn() {
         ibFavorite = findViewById(R.id.ibFavorite);
+        if(db.isFavoriteExists(email, song.getId())) {
+            ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
+        } else {
+            ibFavorite.setImageResource(FAVORITE_ICON);
+        }
         ibFavorite.setOnClickListener(v -> {
-            if (db.isFavoriteExists("mail", song.getId())) {
-                db.removeFavorite("mail", song.getId());
+            if (db.isFavoriteExists(email, song.getId())) {
+                db.removeFavorite(email, song.getId());
                 ibFavorite.setImageResource(FAVORITE_ICON);
+                dataManager.handleFavourite(email, song.getId(), "remove");
             } else {
-                db.addFavorite("mail", song.getId());
+                db.addFavorite(email, song.getId());
                 ibFavorite.setImageResource(FAVORITE_FILLED_ICON);
+                dataManager.handleFavourite(email, song.getId(), "add");
             }
         });
     }

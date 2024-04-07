@@ -64,11 +64,17 @@ public interface ApiService {
     Call<ApiResponse<User>> loginApi(@Field("email") String email, @Field("password") String password);
 //    Call<ApiResponse<User>> loginApi(@Query("email") String email, @Query("password") String password);
 
-
     @POST("users/register")
     Call<ApiResponse<User>> registerApi(@Body User user, @Body String password);
-    @GET("users/{email}/favorite")
-    Call<ApiResponse<Playlist>> getFavoriteApi(@Path("email") String email);
+    @FormUrlEncoded
+    @POST("users/fwps")
+    Call<ApiResponse<User>> forgotPassword(@Field("email") String email, @Field("code") String code);
+    @FormUrlEncoded
+    @POST("users/updatepw")
+    Call<Void> updatePassword(@Field("email") String email, @Field("password") String password);
+    @FormUrlEncoded
+    @POST("users/update")
+    Call<Void> handleFavourite(@Field("email") String email, @Field("songId") String songId, @Field("action") String action);
 
     @GET("songs")
     Call<ApiResponse<List<Song>>> getAllSongs();

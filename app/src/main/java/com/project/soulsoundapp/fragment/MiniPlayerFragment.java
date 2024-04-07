@@ -2,6 +2,7 @@ package com.project.soulsoundapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,10 +29,18 @@ public class MiniPlayerFragment extends Fragment {
     private static MediaPlayerService mediaPlayerService;
     private static MiniPlayerFragment instance;
     private ViewGroup layout_mini_player_container;
+    private SharedPreferences prefs;
+    private static final String SHARED_PREF_NAME = "player_music";
+    private static final String KEY_SONG_ID = "songId";
+    private static final String KEY_SONG_INDEX = "songIndex";
+    private static final String KEY_PLAYLIST_ID = "playlistId";
+    private static final String KEY_CURRENT_TIME = "currentTime";
+    private static final String KEY_IS_PLAYING = "isPlaying";
 
     public MiniPlayerFragment(Context context) {
         instance = this;
         mediaPlayerService = MediaPlayerService.getInstance(context.getApplicationContext());
+        prefs = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static MiniPlayerFragment getInstance(Context context) {
@@ -89,12 +98,17 @@ public class MiniPlayerFragment extends Fragment {
     }
 
     public void setMiniPlayer() {
-        if(mediaPlayerService.getCurrentSong() != null) {
+        if(prefs.contains(KEY_IS_PLAYING)) {
+            layout_mini_player_container.setVisibility(View.VISIBLE);
+            mediaPlayerService.updateState();
+
             Song currentSong = mediaPlayerService.getCurrentSong();
             Picasso.get().load(currentSong.getThumbnailUrl()).into(ivMiniPlayerCover);
             tvMiniPlayerSongName.setText(currentSong.getTitle());
             tvMiniPlayerArtistName.setText(currentSong.getArtist());
             ibMiniPlayerPlayPause.setBackgroundResource(mediaPlayerService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
+        } else {
+            layout_mini_player_container.setVisibility(View.GONE);
         }
     }
 }

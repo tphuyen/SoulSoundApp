@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.SoulSoundApp"
         android:usesCleartextTraffic="true"
+        android:windowSoftInputMode="adjustPan"
         tools:targetApi="31">
         <activity
             android:name=".activity.CategoryActivity"

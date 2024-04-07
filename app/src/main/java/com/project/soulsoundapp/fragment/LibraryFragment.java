@@ -67,8 +67,9 @@ public class LibraryFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), PlaylistActivity.class);
                 Bundle bundle = new Bundle();
-                ArrayList<String> list = new ArrayList<String>(mFavorite);
-                bundle.putStringArrayList("mFavorite", list);
+                ArrayList<String> arrayListFavourite = new ArrayList<>(mFavorite);
+                bundle.putString("mTitle", "Bài hát yêu thích");
+                bundle.putStringArrayList("mFavorite", arrayListFavourite);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -80,13 +81,11 @@ public class LibraryFragment extends Fragment {
         item_ivFavouriteImage = itemFavourite.findViewById(R.id.ivPlaylistImage);
         item_tvFavouriteName = itemFavourite.findViewById(R.id.tvPlaylistName);
         item_tvFavouriteSongCount = itemFavourite.findViewById(R.id.tvSongCount);
-        mFavorite = new ArrayList<>();
         setFavourite();
     }
 
     public void setFavourite() {
-        List<String> mFavorite = db.getFavoriteSongs();
-
+        mFavorite = db.getFavoriteSongs();
         item_tvFavouriteName.setText("Bài hát yêu thích");
         if(mFavorite.size() > 0) {
             item_tvFavouriteSongCount.setText(Integer.toString(mFavorite.size()));
