@@ -37,6 +37,7 @@ public class PlaylistActivity extends AppCompatActivity {
     private Playlist playlist;
     private DatabaseHelper db;
     private String mTitle;
+    private int mCover;
     private static final String TAG = "PlaylistActivity";
 
     @Override
@@ -63,6 +64,8 @@ public class PlaylistActivity extends AppCompatActivity {
             playlist = (Playlist) getIntent().getSerializableExtra("playlist");
         } else {
             mTitle = getIntent().getStringExtra("mTitle");
+            mCover = getIntent().getIntExtra("mCover", R.drawable.favplaylist);
+
         }
         if((Playlist) getIntent().getSerializableExtra("playlist") != null) {
             setPlaylist();
@@ -94,6 +97,7 @@ public class PlaylistActivity extends AppCompatActivity {
 
     private void setFavorites() {
         tvTitle.setText(mTitle);
+        Picasso.get().load(mCover).into(ivPlaylistImage);
         List<String> favorites = getIntent().getStringArrayListExtra("mFavorite");
         songs = db.getSongByIds(favorites);
         setSongsList(songs);

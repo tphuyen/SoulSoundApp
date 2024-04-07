@@ -10,8 +10,7 @@
         android:id="@+id/mini_player_background"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="#7001B8AD"
-
+        android:background="#6011FDD2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
@@ -32,9 +31,12 @@
 
     <TextView
         android:id="@+id/tvMiniPlayerSongName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="169dp"
+        android:layout_height="26dp"
         android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:maxEms="12"
+        android:singleLine="true"
         android:text="Song Name"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -42,8 +44,7 @@
         android:maxLines="1"
         app:layout_constraintBottom_toTopOf="@id/tvMiniPlayerArtistName"
         app:layout_constraintStart_toEndOf="@id/ivMiniPlayerCover"
-        app:layout_constraintTop_toTopOf="@id/ivMiniPlayerCover"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toTopOf="@id/ivMiniPlayerCover" />
 
     <TextView
         android:id="@+id/tvMiniPlayerArtistName"
@@ -64,12 +65,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <ImageButton
         android:id="@+id/ibMiniPlayerPrevious"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/ic_skip_previous"
         app:layout_constraintBottom_toTopOf="@+id/mini_player_background"
         app:layout_constraintEnd_toStartOf="@id/ibMiniPlayerPrevious"
@@ -80,8 +81,8 @@
 
     <ImageButton
         android:id="@+id/ibMiniPlayerPlayPause"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/ic_pause"
         app:layout_constraintBottom_toTopOf="@+id/mini_player_background"
         app:layout_constraintEnd_toStartOf="@id/ibMiniPlayerNext"
@@ -92,8 +93,8 @@
 
     <ImageButton
         android:id="@+id/ibMiniPlayerNext"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/ic_skip_next"
         app:layout_constraintBottom_toTopOf="@+id/mini_player_background"
         app:layout_constraintEnd_toEndOf="parent"

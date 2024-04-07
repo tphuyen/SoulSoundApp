@@ -100,6 +100,13 @@ public class MiniPlayerFragment extends Fragment {
             mediaPlayerService.nextSong();
             setMiniPlayer();
         });
+
+        tvMiniPlayerSongName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public void setMiniPlayer() {
