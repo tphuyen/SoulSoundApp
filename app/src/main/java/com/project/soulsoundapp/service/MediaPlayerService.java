@@ -1,14 +1,18 @@
 package com.project.soulsoundapp.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.browse.MediaBrowser;
 import android.os.Bundle;
 import android.service.media.MediaBrowserService;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.project.soulsoundapp.activity.SignInActivity;
 import com.project.soulsoundapp.fragment.MiniPlayerFragment;
 import com.project.soulsoundapp.helper.DatabaseHelper;
 import com.project.soulsoundapp.model.Song;
@@ -27,10 +31,22 @@ public class MediaPlayerService extends MediaBrowserService {
     private MiniPlayerFragment miniPlayerFragment;
     private boolean isShuffle = false;
 
+//    Declare Shared Preferences
+    private SharedPreferences prefs;
+    private static final String SHARED_PREF_NAME = "player_music";
+    private static final String KEY_SONG_ID = "songId";
+    private static final String KEY_SONG_INDEX = "songIndex";
+    private static final String KEY_PLAYLIST_ID = "playlistId";
+    private static final String KEY_CURRENT_TIME = "currentTime";
+    private static final String KEY_IS_PLAYING = "isPlaying";
+
     private MediaPlayerService(Context context) {
         db = DatabaseHelper.getInstance(context);
         songs = initSongs();
         miniPlayerFragment = MiniPlayerFragment.getInstance(context);
+
+        prefs = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
     }
 
     public static synchronized MediaPlayerService getInstance(Context context) {
@@ -38,6 +54,25 @@ public class MediaPlayerService extends MediaBrowserService {
             instance = new MediaPlayerService(context.getApplicationContext());
         }
         return instance;
+    }
+
+    public void updateState() {
+        currentSongIndex = prefs.getInt(KEY_SONG_INDEX, 0);
+        int currentTime = prefs.getInt(KEY_CURRENT_TIME, 0);
+
+        Log.d(TAG, "Current time : " + currentTime);
+
+        try {
+            if(player == null) {
+                player = new MediaPlayer();
+            }
+            String songUrl = songs.get(currentSongIndex).getSongUrl();
+            player.setDataSource(songUrl);
+            player.prepare();
+            player.seekTo(currentTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setShuffle(boolean isShuffle) {
@@ -69,6 +104,14 @@ public class MediaPlayerService extends MediaBrowserService {
             player.prepare();
             player.start();
             currentSongIndex = index;
+//            Set prefs
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(KEY_SONG_INDEX, currentSongIndex);
+            editor.putString(KEY_SONG_ID, songs.get(index).getId());
+            editor.putFloat(KEY_CURRENT_TIME, 0);
+            editor.putBoolean(KEY_IS_PLAYING, true);
+            editor.apply();
+
             miniPlayerFragment.setMiniPlayer();
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +124,15 @@ public class MediaPlayerService extends MediaBrowserService {
 
     public void pauseSong() {
         if (player != null && player.isPlaying()) {
+            Log.v(TAG, "Pause in : " + player.getCurrentPosition());
+
             player.pause();
+//            Set prefs
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(KEY_CURRENT_TIME, player.getCurrentPosition());
+            editor.putBoolean(KEY_IS_PLAYING, false);
+            editor.apply();
+
             miniPlayerFragment.setMiniPlayer();
         }
     }
@@ -89,8 +140,14 @@ public class MediaPlayerService extends MediaBrowserService {
     public void resumeSong() {
         if (player != null && !player.isPlaying()) {
             player.start();
+            //            Set prefs
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(KEY_IS_PLAYING, true);
+            editor.apply();
+
             miniPlayerFragment.setMiniPlayer();
         }
+
     }
 
     public void nextSong() {
