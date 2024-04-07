@@ -102,6 +102,11 @@ public class SearchFragment extends Fragment {
         ivCloseIcon = view.findViewById(R.id.ivCloseIcon);
 
         List<Category> categories = db.getAllCategories();
+
+        for (Category c : categories) {
+            Log.v(TAG, "Num of Cate :: " + c.getCategoryPlaylists().size());
+        }
+
         Log.v(TAG, "" + categories.size());
         setCategories(categories);
     }

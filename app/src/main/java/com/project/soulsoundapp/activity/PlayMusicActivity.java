@@ -54,12 +54,11 @@ public class PlayMusicActivity extends AppCompatActivity {
     TextView tvNoComments;
     ImageButton ibSend;
 
-    ImageButton ivClose;
     EditText etComment;
 
     ImageView ivBackground, ivSongCover;
     TextView tvStartTime, tvEndTime, tvTitle, tvArtist, tvLyrics;
-    ImageButton ibBack, ibPlayPause, ibNext, ibPrevious, ibFavorite, ibShuffle, ibMenu;
+    ImageButton ibBack, ibPlayPause, ibNext, ibPrevious, ibFavorite, ibShuffle, ibMenu, ivClose;
     Button btnLyrics, btnCloseLyrics;
     SeekBar sbSongProgress;
     BottomSheetDialog bottomSheetDialog;

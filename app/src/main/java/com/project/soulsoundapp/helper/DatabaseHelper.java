@@ -490,6 +490,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return playlists;
     }
 
+    public List<Playlist> getPlaylistsByIds(List<String> categoryPlaylists) {
+        List<Playlist> playlists = new ArrayList<>();
+        for (String id : categoryPlaylists) {
+            String PLAYLISTS_SELECT_BY_IDS_QUERY =
+                    String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_PLAYLIST, KEY_PLAYLIST_ID, id);
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.rawQuery(PLAYLISTS_SELECT_BY_IDS_QUERY, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    do {
+                        Playlist playlist = new Playlist(
+                                cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_ID)),
+                                cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_USER_ID)),
+                                cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_TITLE)),
+                                cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_DESCRIPTION)),
+                                cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_THUMBNAIL_URL)),
+                                cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_COVER_URL)),
+                                getSongsOfPlaylist(cursor.getString(cursor.getColumnIndex(KEY_PLAYLIST_ID)))
+                        );
+
+                        playlists.add(playlist);
+                    } while(cursor.moveToNext());
+                }
+            } catch (Exception e) {
+                Log.d(TAG, "Error while trying to get posts from database");
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
+            }
+        }
+
+        return playlists;
+    }
+
 //    END HANDLE PLAYLIST
 
 //    BEGIN HANDLE FAVORITE PLAYLIST
@@ -642,7 +677,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
 
             for (String playlistId : category.getCategoryPlaylists()) {
-                if(isSongAvailable(playlistId)) {
+                if(!isCategoryPlaylistExists(category.getCategoryId(), playlistId)) {
                     addCategoryPlaylist(category.getCategoryId(), playlistId);
                 }
             }
@@ -704,6 +739,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<String> getPlaylistsOfCategory(String categoryId) {
         List<String> playlists = new ArrayList<>();
 
+        Log.v(TAG, "Cate Id :: " + categoryId);
+
         String CP_PLAYLISTS_SELECT_QUERY =
                 String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_CP, KEY_CP_CATEGORY_ID, categoryId);
 
@@ -716,6 +753,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     playlists.add(playlist);
                 } while(cursor.moveToNext());
             }
+            Log.v(TAG, "Num pl of Cate Id :: " + playlists.size());
         } catch (Exception e) {
             Log.d(TAG, "Error while trying to get playlist from database");
         } finally {

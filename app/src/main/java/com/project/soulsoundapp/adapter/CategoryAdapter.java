@@ -3,7 +3,9 @@ package com.project.soulsoundapp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+    private static final String TAG = "CategoryAdapter";
 
     private List<Category> categories;
     private Context context;
@@ -60,6 +63,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 Intent intent = new Intent(context, CategoryActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("category", category);
+                Log.v(TAG, "CA :: " + category.getCategoryPlaylists().size());
+                intent.putExtras(bundle); // Gắn Bundle vào Intent
                 context.startActivity(intent);
             }
         });
