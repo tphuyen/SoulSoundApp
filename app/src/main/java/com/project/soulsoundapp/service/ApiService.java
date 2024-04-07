@@ -76,6 +76,9 @@ public interface ApiService {
     @POST("users/update")
     Call<Void> handleFavourite(@Field("email") String email, @Field("songId") String songId, @Field("action") String action);
 
+    @FormUrlEncoded
+    @POST("users/checkemail")
+    Call<ApiResponse<Boolean>> checkEmail(@Field("email") String email);
     @GET("songs")
     Call<ApiResponse<List<Song>>> getAllSongs();
     @GET("songs/hitsong")

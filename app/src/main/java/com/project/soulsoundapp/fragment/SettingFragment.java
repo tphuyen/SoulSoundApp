@@ -144,8 +144,10 @@ SharedPreferences.Editor editorMusic;
     private void initView(View view){
         switchMode = view.findViewById(R.id.switchMode);
         sharedPreferences = getContext().getSharedPreferences("MODE", Context.MODE_PRIVATE);
-        nightMode = sharedPreferences.getBoolean("nightMode", false);
-        switchMode.setChecked(nightMode);
+        if(sharedPreferences.contains("nightMode")) {
+            nightMode = sharedPreferences.getBoolean("nightMode", false);
+            switchMode.setChecked(nightMode);
+        }
 
         switchMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +161,7 @@ SharedPreferences.Editor editorMusic;
                 editor = sharedPreferences.edit();
                 editor.putBoolean("nightMode", nightMode);
                 editor.apply();
+                getActivity().recreate();
             }
         });
 //        switchModeLanguage=view.findViewById(R.id.switchModeLanguage);
@@ -180,7 +183,6 @@ SharedPreferences.Editor editorMusic;
 //                setLocale(languageCode);
 //
 //                // Tái tạo activity để cập nhật ngôn ngữ
-//                getActivity().recreate();
 //            }
 //        });
     }

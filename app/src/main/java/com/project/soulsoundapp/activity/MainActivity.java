@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private void setMiniPlayer() {
         flMiniPlayer.setVisibility(View.VISIBLE);
 
-        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment(this);
+//        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment(this);
+        MiniPlayerFragment miniPlayerFragment = MiniPlayerFragment.getInstance(getApplicationContext());
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.flMiniPlayer, miniPlayerFragment).commit();
     }

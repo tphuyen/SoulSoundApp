@@ -13,8 +13,14 @@ import android.widget.Toast;
 
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.helper.DatabaseHelper;
+import com.project.soulsoundapp.model.User;
+import com.project.soulsoundapp.service.ApiService;
 
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ForgetPassword extends AppCompatActivity {
     TextView tvForgotPw, tvEmailReset, tvBackSignIn;
@@ -37,14 +43,28 @@ public class ForgetPassword extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 String email = etEmailReset.getText().toString();
-                boolean checkUserEmail = databaseHelper.checkMail(email);
-                if(checkUserEmail){
-                    Intent intent = new Intent(getApplicationContext(), VerifyCodeActivity.class);
-                    intent.putExtra("email",email);
-                    startActivity(intent);
-                }else {
-                    Toast.makeText(ForgetPassword.this, "Email does not exist", Toast.LENGTH_SHORT).show();
-                }
+                ApiService.apiService.checkEmail(email)
+                        .enqueue(new Callback<ApiService.ApiResponse<Boolean>>() {
+                            @Override
+                            public void onResponse(Call<ApiService.ApiResponse<Boolean>> call, Response<ApiService.ApiResponse<Boolean>> response) {
+                                if(response.isSuccessful()) {
+                                    assert response.body() != null;
+                                    Boolean result = response.body().getData();
+                                    if(result) {
+                                        Intent intent = new Intent(getApplicationContext(), VerifyCodeActivity.class);
+                                        intent.putExtra("email",email);
+                                        startActivity(intent);
+                                    }
+                                } else {
+                                    Toast.makeText(ForgetPassword.this, "Call Api Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiService.ApiResponse<Boolean>> call, Throwable throwable) {
+                                Toast.makeText(ForgetPassword.this, "Call Api Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
     }

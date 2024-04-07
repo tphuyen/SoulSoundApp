@@ -36,15 +36,24 @@ public class MiniPlayerFragment extends Fragment {
     private static final String SHARED_PREF_NAME = "player_music";
     private static final String KEY_IS_PLAYING = "isPlaying";
 
-    public MiniPlayerFragment(Context context) {
-        instance = this;
-        mediaPlayerService = MediaPlayerService.getInstance(context.getApplicationContext());
-        prefs = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-    }
+//    public MiniPlayerFragment(Context context) {
+//        instance = this;
+//        mediaPlayerService = MediaPlayerService.getInstance(context.getApplicationContext());
+//        prefs = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+//    }
+//
+//    public static MiniPlayerFragment getInstance(Context context) {
+//        if (instance == null) {
+//            instance = new MiniPlayerFragment(context);
+//        }
+//        return instance;
+//    }
 
     public static MiniPlayerFragment getInstance(Context context) {
         if (instance == null) {
-            instance = new MiniPlayerFragment(context);
+            instance = new MiniPlayerFragment();
+            mediaPlayerService = MediaPlayerService.getInstance(context.getApplicationContext());
+            instance.prefs = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         }
         return instance;
     }
@@ -128,4 +137,10 @@ public class MiniPlayerFragment extends Fragment {
         tvMiniPlayerArtistName.setText(song.getArtist());
         ibMiniPlayerPlayPause.setBackgroundResource(MediaPlayerService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setMiniPlayer(); // Cập nhật lại mini player khi fragment được hoạt động lại
+    }
+
 }
