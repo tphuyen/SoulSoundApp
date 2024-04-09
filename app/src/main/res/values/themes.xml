@@ -1,9 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.SoulSoundApp" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.SoulSoundApp" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.SoulSoundApp" parent="Base.Theme.SoulSoundApp" />
+    
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+<!--Light Mode -->
+    <style name="ScreenBackGround"><item name="android:background">@color/white</item></style>
+    <style name="CardBackGround"><item name="android:background">@color/white</item></style>
+    <style name="TextColor"><item name="android:textColor">@color/black</item></style>
+    <style name="ImageChange"><item name="android:src">@drawable/ic_next_dark</item></style>
+    <style name="ImageChange1"><item name="android:src">@drawable/ic_arrow_back_dark</item></style>
+    <style name="ImageChange2"><item name="android:src">@drawable/ic_person_dark</item></style>
+    <style name="BgSleepTimer"><item name="android:background">@drawable/bg_reset_pw</item></style>
 </resources>

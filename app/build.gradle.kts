@@ -39,4 +39,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation ("com.github.bumptech.glide:glide:4.13.2")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:retrofit:2.10.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.10.0")
+    implementation ("com.airbnb.android:lottie:6.4.0")
 }

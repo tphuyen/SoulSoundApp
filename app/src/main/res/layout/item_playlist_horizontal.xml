@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="7dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="15dp">
+
+        <ImageView
+            android:id="@+id/ivImgPlaylist"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:background="@drawable/bg_img_radious"        
+            android:src="@drawable/img_kpop"
+            />
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/tvNamePlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        style="@style/TextColor"
+        android:layout_marginVertical="4dp"
+        android:layout_marginStart="7dp"
+        android:textStyle="bold"
+        android:text="sinh (EP)"
+        />
+    <TextView
+        android:id="@+id/tvArtistPlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_marginStart="7dp"
+        android:textColor="@color/icon_btn_nav"
+        android:text="Mer, Kriss"
+        />
+
+</LinearLayout>
