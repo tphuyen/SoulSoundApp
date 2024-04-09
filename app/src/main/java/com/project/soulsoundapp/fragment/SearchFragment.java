@@ -57,20 +57,26 @@ public class SearchFragment extends Fragment {
 
     private void addEvents() {
         etSearch.setOnEditorActionListener((v, actionId, event) -> {
-            String key = v.getText().toString().trim();
             if (actionId == EditorInfo.IME_ACTION_NEXT ||
-                actionId == EditorInfo.IME_ACTION_DONE ||
-                actionId == EditorInfo.IME_ACTION_SEARCH ||
-                actionId == EditorInfo.IME_ACTION_GO) {
+                    actionId == EditorInfo.IME_ACTION_DONE ||
+                    actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    actionId == EditorInfo.IME_ACTION_GO ||
+                    (event != null && event.getAction() == KeyEvent.ACTION_DOWN &&
+                            event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+
+                String key = v.getText().toString().trim();
+
                 if (!key.isEmpty()) {
                     searchSongByTitle(key);
                 } else {
                     setCategories(db.getAllCategories());
                 }
+
                 return true;
             }
             return false;
         });
+
 
         ivCloseIcon.setOnClickListener(v -> {
             etSearch.setText("");
