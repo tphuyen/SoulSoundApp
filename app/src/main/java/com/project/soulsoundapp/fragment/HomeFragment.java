@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 //import com.denzcoskun.imageslider.ImageSlider;
 //import com.denzcoskun.imageslider.constants.ScaleTypes;
 //import com.denzcoskun.imageslider.models.SlideModel;
-import com.project.soulsoundapp.Domian.SliderItems;
+import com.project.soulsoundapp.domain.SliderItems;
 import com.project.soulsoundapp.R;
 import com.project.soulsoundapp.adapter.PlaylistHorizontalAdpater;
 import com.project.soulsoundapp.adapter.SliderAdapter;
