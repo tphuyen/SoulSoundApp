@@ -1,5 +1,6 @@
 package com.project.soulsoundapp.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,7 +35,8 @@ public class SettingFragment extends Fragment {
 
     private ImageView ivUserAvatar, ivSleepTimer;
     private TextView tvViewProfile, tvNameUser;
-    private Button btnLogOut;
+    private Button btnLogOut, btnDialogCancel, btnDialogLogout;
+    Dialog dialog;
     SwitchCompat switchMode, switchModeLanguage;
     boolean nightMode, eLanguage;
     SharedPreferences sharedPreferences;
@@ -76,6 +78,14 @@ SharedPreferences.Editor editorMusic;
         btnLogOut = view.findViewById(R.id.btnLogOut);
         ivSleepTimer = view.findViewById(R.id.ivSleepTimer);
         tvNameUser = view.findViewById(R.id.tvNameUser);
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_box);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.bg_round_corner);
+        dialog.setCancelable(false);
+
+        Button btnDialogCancel = dialog.findViewById(R.id.btnDialogCancel);
+        Button btnDialogLogout = dialog.findViewById(R.id.btnDialogLogout);
 
         sharedPreferences = getContext().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         prefs = getContext().getSharedPreferences(SHARED_PREF_NAME_MUSIC, Context.MODE_PRIVATE);
@@ -92,7 +102,15 @@ SharedPreferences.Editor editorMusic;
     }
 
     private void addEvents() {
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.btnDialogCancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        // Sửa đổi từ btnDialogLogout sang btnDialogLogout
+        dialog.findViewById(R.id.btnDialogLogout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Xóa thông tin user khỏi SharedPreferences
@@ -113,10 +131,18 @@ SharedPreferences.Editor editorMusic;
                 Log.v(TAG, "Name removed: " + isNameRemoved);
                 Log.v(TAG, "Email removed: " + isEmailRemoved);
 
-                // Chuyển sang màn hình đăng ""nhập
+                dialog.dismiss();
+                // Chuyển sang màn hình đăng nhập
                 Intent intent = new Intent(getContext(), SignInActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa hết activity cũ khi chuyển qua activity mới
                 startActivity(intent);
+            }
+        });
+
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
             }
         });
         ivUserAvatar.setOnClickListener(new View.OnClickListener() {
