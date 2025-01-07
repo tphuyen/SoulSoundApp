@@ -44,7 +44,7 @@ Soul Sound is a music streaming application designed for Android devices, provid
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/hoangnd107/soul-sound-mobile-app.git
+   git clone https://github.com/tphuyen/SoulSoundApp.git
    ```
 2. Open the project in Android Studio.
 3. Connect an Android device or start an emulator.
