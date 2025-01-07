@@ -54,7 +54,7 @@
             android:id="@+id/tvEmailError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/yellow"
+            android:textColor="@color/red"
             android:visibility="gone"
             android:layout_below="@id/etEmail"
             android:layout_marginTop="8dp" />
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/etPassword"
             android:layout_marginTop="8dp"
-            android:textColor="@color/yellow"
+            android:textColor="@color/red"
             android:visibility="gone" />
 
         <TextView

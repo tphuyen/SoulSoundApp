@@ -1,4 +1,4 @@
-package com.project.soulsoundapp.Domian;
+package com.project.soulsoundapp.domain;
 
 public class SliderItems {
     private int image;
