@@ -54,4 +54,3 @@ Soul Sound is a music streaming application designed for Android devices, provid
 - **Vu Ba Thang**
 - **Trinh Phuong Huyen**
 - **Nguyen Duy Hoang**
-- **Nguyen Thi Ngoc Anh**
